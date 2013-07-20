@@ -1,0 +1,290 @@
+
+/* twitter bootstrap, including custom variables */
+@import 'bootstrap.less';
+
+
+/* paths */
+@font-dir: '/assets/font';
+@img-dir: '/assets/img';
+
+
+/* font icons */
+@font-face
+{
+	font-family : 'icomoon';
+	font-style : normal;
+	font-weight : normal;
+	src : url("@{font-dir}/icomoon.eot");
+	src : url("@{font-dir}/icomoon.eot?#iefix") format('embedded-opentype'),
+		url("@{font-dir}/icomoon.woff") format('woff'),
+		url("@{font-dir}/icomoon.ttf") format('truetype'),
+		url("@{font-dir}/icomoon.svg#icomoon") format('svg');
+}
+
+[class*='icon-']:before
+{
+	-webkit-font-smoothing : antialiased;
+	font-family : 'icomoon';
+	font-style : normal;
+	font-variant : normal;
+	font-weight : normal;
+	line-height : 1;
+	margin-right : 5px;
+	speak : none;
+	text-transform : none;
+}
+
+.icon-locked:before
+{
+	color : #778899;
+	content: '\e000';
+}
+
+.icon-protected:before
+{
+	color : #4979b9;
+	content: '\e001';
+}
+
+.icon-wikied:before
+{
+	color : #2F4F4F;
+	content: '\e002';
+}
+
+.icon-accepted:before
+{
+	color : #46b525;
+	content: '\e003';
+}
+
+.icon-up:before {content: '\e004';}
+.icon-down:before {content: '\e005';}
+
+/* global styles */
+
+* {	font-family : 'Droid Sans', 'sans-serif' !important;}
+
+html
+{
+	margin : 0 auto;
+	max-width : 1005px;
+}
+
+body {margin : 10px;}
+
+legend
+{
+	font-size : medium;
+	font-weight : bold;
+}
+
+h1
+{
+	border-bottom : 1px solid #e5e5e5;
+	font-size : 30px;
+	padding-bottom : 15px;
+
+	small {font-size : small;}
+}
+
+.disabled {text-decoration : line-through;}
+
+#data-sources
+{
+	float : right;
+	text-align : right;
+	line-height : 25px;
+
+	strong
+	{
+		border-bottom : 1px solid #e5e5e5;
+		padding-bottom : 5px;
+	}
+
+	small {margin : 0 5px;}
+}
+
+#data-table
+{
+	border-top : 0;
+
+	&.show-scroll
+	{
+		padding-left : 0;
+
+		tbody
+		{
+			height : 348px;
+			overflow : auto;
+			overflow-y : scroll;
+		}
+
+		.c1 {width : 172px;}
+		.c2 {padding-right : 20px;}
+		.go-top {display : none;}
+		.title {width : 725px;}
+	}
+
+	.title
+	{
+		text-align : left;
+		width : 740px;
+
+		a {margin-right : 5px;}
+	}
+
+	.go-top // layout issues with this right now, try later
+	{
+		position : relative;
+		right : 35px;
+		top : 35px;
+		display : none; // buggy
+
+		div
+		{
+			border : 1px solid #e5e5e5;
+			border-radius : 4px 0 0 4px;
+			border-right : 0;
+			line-height : 15px;
+			padding : 5px 0;
+			position : fixed;
+			text-align : center;
+
+			[class*='icon-']:before
+			{
+				margin : 0;
+				padding : 10px;
+			}
+
+			a:hover {text-decoration : none;}
+		}
+	}
+
+	.c1
+	{
+		border-radius : 4px 4px 0 0;
+		border-top : 1px solid #e5e5e5;
+		width : 157px;
+	}
+
+	.c4
+	{
+		width : 55px;
+
+		&.border {border-radius : 4px 0 0 0;}
+	}
+
+	.c2, .c3 {width : 45px;}
+
+	thead
+	{
+		display : block;
+
+		th, div
+		{
+			background-color : #f8f8ff;
+			text-align : center;
+		}
+
+		& > tr
+		{
+			display : table;
+			width : 100%;
+		}
+
+		.stats
+		{
+			background-color : transparent;
+			border : 0;
+			font-weight : normal;
+			padding-right : 10px;
+			text-align : right;
+		}
+	}
+
+	tbody
+	{
+		display : block;
+
+		tr
+		{
+			td.failure
+			{
+				color : #b94a48;
+				background-color : transparent;
+				display : block;
+				font-weight : bold;
+				padding : 25px;
+				text-align : center;
+				width : 985px;
+			}
+
+			&.adelv > td {background-color: @autodeleteBackground;}
+			&.cv > td {background-color: @warningBackground;}
+			&.delv > td {background-color: @errorBackground;}
+			&.ro > td {background-color: @successBackground;}
+			&.rv > td {background-color: @infoBackground;}
+
+			&.adelv:hover > td {background-color: darken(@autodeleteBackground, 5%);}
+			&.cv:hover > td {background-color: darken(@warningBackground, 5%);}
+			&.delv:hover > td {background-color: darken(@errorBackground, 5%);}
+			&.ro:hover > td {background-color: darken(@successBackground, 5%);}
+			&.rv:hover > td {background-color: darken(@infoBackground, 5%);}
+		}
+
+		a:visited {color : @linkColorVisited;}
+		td {text-align : center;}
+	}
+
+	strong {margin : 0 5px 0 15px;}
+
+	&.hide-adelv .adelv, &.hide-cv .cv, &.hide-delv .delv,
+	&.hide-ro .ro, &.hide-rv .rv {display : none;}
+}
+
+#options-form
+{
+	float : left;
+	line-height : 30px;
+	margin : 0 50px 0 0;
+
+	label
+	{
+		border-radius : 4px;
+		margin-right : 20px;
+		padding : 0 5px;
+
+		&.adelv {background-color : @autodeleteBackground;}
+		&.cv {background-color : @warningBackground;}
+		&.delv {background-color : @errorBackground;}
+		&.ro {background-color : @successBackground;}
+		&.rv {background-color : @infoBackground;}
+
+		input {margin-right : 5px;}
+	}
+
+	select
+	{
+		width : 42px;
+		height : 20px;
+		padding : 0;
+
+	}
+
+	button {margin-left : 15px;}
+	strong {margin-right : 15px;}
+}
+
+#legend
+{
+	margin : 0;
+
+	span
+	{
+		line-height : 30px;
+		padding-right : 20px;
+	}
+}
+
+#footer {text-align : center;}
