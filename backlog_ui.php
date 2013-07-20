@@ -14,22 +14,21 @@ $chatRoomSource = (isset($_GET['chatroom']));
 
 // set data source options
 if ($chatRoomSource) {
-    $backlog = new Backlog('chat', './assets/cache');
+    $backlog = new Backlog('chat', './assets/cache', ['ids' => 900, 'data' => 120,]);
 } else {
-    $backlog = new Backlog('api', './assets/cache');
+    $backlog = new Backlog('api', './assets/cache', ['ids' => 300, 'data' => 120,]);
 }
 
 
 // only have cron perform a cache update
 if ('cv-pls' === $userAgent) {
     if ($chatRoomSource) {
-        $backlog->setCacheExpirations(['ids' => 900, 'data' => 120,]);
         $backlog->fetchChatQuestionIds();
     } else {
-        $backlog->setCacheExpirations(['ids' => 300, 'data' => 120,]);
         $backlog->fetchApiQuestionIds();
     }
     $backlog->fetchQuestionData();
+    exit;
 }
 
 
