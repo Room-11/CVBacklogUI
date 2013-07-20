@@ -14,11 +14,9 @@ $chatRoomSource = (isset($_GET['chatroom']));
 
 // set data source options
 if ($chatRoomSource) {
-    $backlog = new Backlog('chat');
-    $backlog->setCacheDir('./assets/cache');
+    $backlog = new Backlog('chat', './assets/cache');
 } else {
-    $backlog = new Backlog('api');
-    $backlog->setCacheDir('./assets/cache');
+    $backlog = new Backlog('api', './assets/cache');
 }
 
 
