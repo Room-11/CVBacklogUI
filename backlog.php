@@ -3,8 +3,7 @@
 /**
 * Some description which I can't think of
 *
-* @author       Kyra D. <kyra@existing.me>
-* @copyright    2013 © Kyra D.
+* @oauthor      Kyra D. <kyra@existing.me>
 * @method       void __construct(string $dataSource)
 * @method       void fetchChatQuestionIds(void)
 * @method       void fetchApiQuestionIds(int $page)
