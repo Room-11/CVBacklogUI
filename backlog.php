@@ -9,6 +9,7 @@
 * @method       void fetchChatQuestionIds(void)
 * @method       void fetchApiQuestionIds(int $page)
 * @method       void fetchQuestionData(void)
+* @method       void saveCacheFile(string $cacheFilePath, object $cacheFileContents)
 * @method       void getQuestionIds(void)
 * @method       void getQuestionData(void)
 * @method       void setCacheDir(string $cacheDir)
@@ -59,8 +60,7 @@ class Backlog
         foreach ($questions as $question) {
             $this->questionIds[] = $question->question_id;
         }
-        file_put_contents($this->idsCacheFilename, json_encode($this->questionIds), LOCK_EX);
-        chmod($this->idsCacheFilename, 0604);
+        $this->saveCacheFile($this->idsCacheFilename, $this->questionIds);
     }
 
     /**
@@ -103,8 +103,7 @@ class Backlog
         if ($apiData->has_more && $page !== 15) {
             $this->fetchApiQuestionIds(++$page);
         } else {
-            file_put_contents($this->idsCacheFilename, json_encode($this->questionIds), LOCK_EX);
-            chmod($this->idsCacheFilename, 0604);
+            $this->saveCacheFile($this->idsCacheFilename, $this->questionIds);
         }
     }
 
@@ -140,9 +139,20 @@ class Backlog
             )));
 
             $this->questionsData = array_merge($this->questionsData, $apiData->items);
-            file_put_contents($this->dataCacheFilename, json_encode($this->questionsData), LOCK_EX);
-            chmod($this->dataCacheFilename, 0604);
+            $this->saveCacheFile($this->dataCacheFilename, $this->questionsData);
         }
+    }
+
+    /**
+    * Saves a cache file
+    *
+    * @access   public
+    * @param    string  $cacheFilePath
+    * @param    object  $cacheFileContents
+    */
+    public function saveCacheFile($cacheFilePath, $cacheFileContents) {
+        file_put_contents($cacheFilePath, json_encode($cacheFileContents), LOCK_EX);
+        chmod($cacheFilePath, 0604);
     }
 
     /**
@@ -172,8 +182,8 @@ class Backlog
     public function setCacheDir($cacheDir) {
         if (is_dir($cacheDir)) {
             $this->cacheDir = $cacheDir;
-            $this->setIdsCacheFilePath($this->dataSource);
-            $this->setDataCacheFilePath($this->dataSource);
+            $this->setIdsCacheFilePath();
+            $this->setDataCacheFilePath();
         }
     }
 
