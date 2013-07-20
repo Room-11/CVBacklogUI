@@ -215,8 +215,9 @@ if (0 >= $backlog->getQuestionsCount()) {
 ?>
 </tbody></table>
 <div id='footer'>
-<small>Chat <a href='http://cvbacklog.gordon-oheim.biz/' target='_blank'>backlog</a> data provided by <a href='http://stackoverflow.com/users/208809/gordon' target='_blank'>@Gordon</a>. API data provided by the <a href='https://stackexchange.com/' target='_blank'>Stack Exchange Network</a>.<br />
-Layout and back-end by <a href='http://stackoverflow.com/users/1592648/cryptic' target='_blank'>@cryptic</a>. JavaScript magic by <a href='http://stackoverflow.com/users/889949/daverandom' target='_blank'>@DaveRandom</a>.</small></div>
+<small>API data provided by the <a href='https://stackexchange.com/' target='_blank'>Stack Exchange Network</a>.
+Official Github <a href='https://github.com/PHP-Chat/CVBacklogUI' target='_blank'>CVBacklogUI</a> project.<br />
+Made by and for the Stack Overflow <a href='http://chat.stackoverflow.com/rooms/11/php' target='_blank'>PHP chatroom</a>.</small></div>
 <script src='/assets/jscc/main.jscc'></script>
 </body>
 </html>
