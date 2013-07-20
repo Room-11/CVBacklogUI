@@ -16,7 +16,6 @@ require_once __DIR__ . '/json_file_cache.php';
 * @method       void setDataSource(string $dataSource)
 * @method       void setIdsCacheFilePath(void)
 * @method       void setDataCacheFilePath(void)
-* @method       void setCacheExpirations(array $expirationTimes)
 * @method       void checkCachExpiration(string $cacheFilename, int $expirationTime)
 * @method       int getQuestionsCount(void)
 * @method       string getCloseReasonName(string $closeReason)
@@ -56,15 +55,15 @@ class Backlog
     * Sets data source for current instance
     *
     * @access   public
-     * @param    string  $dataSource
-     * @param    string  $cacheDir
+    * @param    string  $dataSource
+    * @param    string  $cacheDir
     */
-    public function __construct($dataSource, $cacheDir) {
+    public function __construct($dataSource, $cacheDir, Array $expirationTimes) {
         $this->setDataSource($dataSource);
 
         $dataSourceDir           = $cacheDir . '/' . $this->dataSource;
-        $this->questionIdsCache  = new JsonFileCache($dataSourceDir . '_backlog_ids.cache.json', 900);
-        $this->questionDataCache = new JsonFileCache($dataSourceDir . '_backlog_data.cache.json', 120);
+        $this->questionIdsCache  = new JsonFileCache($dataSourceDir . '_backlog_ids.cache.json', $expirationTimes['ids']);
+        $this->questionDataCache = new JsonFileCache($dataSourceDir . '_backlog_data.cache.json', $expirationTimes['data']);
     }
 
     /**
@@ -73,7 +72,7 @@ class Backlog
     * @access   public
     */
     public function fetchChatQuestionIds() {
-        if ($this->questionIdsCache->isExpired()) {
+        if (!$this->questionIdsCache->isExpired()) {
             return;
         }
 
@@ -101,7 +100,7 @@ class Backlog
     * @param    int     $page
     */
     public function fetchApiQuestionIds($page = 1) {
-        if ($this->questionIdsCache->isExpired()) {
+        if (!$this->questionIdsCache->isExpired()) {
             return;
         }
 
@@ -147,7 +146,7 @@ class Backlog
     * @access   public
     */
     public function fetchQuestionData() {
-        if ($this->questionDataCache->isExpired()) {
+        if (!$this->questionDataCache->isExpired()) {
             return;
         }
 
