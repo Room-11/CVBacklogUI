@@ -58,8 +58,8 @@ header('X-Robots-Tag: noarchive, noodp, nofollow, index');       // search engin
 if (false !== strpos($userAgent, 'MSIE'))
 {
     header('MSThemeCompatible: no');           // disable theming
-	header('X-Content-Type-Options: nosniff'); // prevent MIME sniffing
-	header('X-XSS-Protection: 1; mode=block'); // prevent XSS Attacks
+    header('X-Content-Type-Options: nosniff'); // prevent MIME sniffing
+    header('X-XSS-Protection: 1; mode=block'); // prevent XSS Attacks
 }
 
 // Content Security Policy (http://www.w3.org/TR/CSP/)
