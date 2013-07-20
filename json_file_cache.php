@@ -6,7 +6,7 @@
  * @author       Marco Pivetta <ocramius@gmail.com>
  * @copyright    2013 © Kyra D. <kyra@existing.me>
  */
-class FileCache
+class JsonFileCache
 {
     private $path;
     private $ttl;
@@ -34,6 +34,16 @@ class FileCache
     public function isFresh()
     {
         return file_exists($this->path) && ($this->ttl > (time() - filemtime($this->path)));
+    }
+
+    /**
+     * Retrieves whether the cache is expired
+     *
+     * @return bool
+     */
+    public function isExpired()
+    {
+        return ! $this->isFresh();
     }
 
     /**

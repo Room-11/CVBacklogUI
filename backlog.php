@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/json_file_cache.php';
+
 /**
 * Some description which I can't think of
 *
@@ -8,7 +10,6 @@
 * @method       void fetchChatQuestionIds(void)
 * @method       void fetchApiQuestionIds(int $page)
 * @method       void fetchQuestionData(void)
-* @method       void saveCacheFile(string $cacheFilePath, object $cacheFileContents)
 * @method       void getQuestionIds(void)
 * @method       void getQuestionData(void)
 * @method       void setCacheDir(string $cacheDir)
@@ -26,17 +27,44 @@
 */
 class Backlog
 {
+    /**
+     * @var array
+     */
+    public $questionIds = [];
 
+    /**
+     * @var array
+     */
     public $questionsData = [];
+
+    /**
+     * @var string
+     */
+    private $dataSource;
+
+    /**
+     * @var JsonFileCache
+     */
+    private $questionIdsCache;
+
+    /**
+     * @var JsonFileCache
+     */
+    private $questionDataCache;
 
     /**
     * Sets data source for current instance
     *
     * @access   public
-    * @param    string  $dataSource
+     * @param    string  $dataSource
+     * @param    string  $cacheDir
     */
-    public function __construct($dataSource) {
+    public function __construct($dataSource, $cacheDir) {
         $this->setDataSource($dataSource);
+
+        $dataSourceDir           = $cacheDir . '/' . $this->dataSource;
+        $this->questionIdsCache  = new JsonFileCache($dataSourceDir . '_backlog_ids.cache.json', 900);
+        $this->questionDataCache = new JsonFileCache($dataSourceDir . '_backlog_data.cache.json', 120);
     }
 
     /**
@@ -45,7 +73,10 @@ class Backlog
     * @access   public
     */
     public function fetchChatQuestionIds() {
-        $this->checkCachExpiration($this->idsCacheFilename, $this->idsCacheExpiration);
+        if ($this->questionIdsCache->isExpired()) {
+            return;
+        }
+
         $jsonFile = 'http://cvbacklog.gordon-oheim.biz/';
         $questions = json_decode(file_get_contents($jsonFile, false,
             stream_context_create([
@@ -59,7 +90,8 @@ class Backlog
         foreach ($questions as $question) {
             $this->questionIds[] = $question->question_id;
         }
-        $this->saveCacheFile($this->idsCacheFilename, $this->questionIds);
+
+        $this->questionIdsCache->write($this->questionIds);
     }
 
     /**
@@ -69,7 +101,10 @@ class Backlog
     * @param    int     $page
     */
     public function fetchApiQuestionIds($page = 1) {
-        $this->checkCachExpiration($this->idsCacheFilename, $this->idsCacheExpiration);
+        if ($this->questionIdsCache->isExpired()) {
+            return;
+        }
+
         $apiQuery = http_build_query([
                 'filter'   => '!wQ0g-ul-W8LDT0w',
                 'key'      => 'pMxerkFG8E257Xblt5BUHA((',
@@ -102,7 +137,7 @@ class Backlog
         if ($apiData->has_more && $page !== 15) {
             $this->fetchApiQuestionIds(++$page);
         } else {
-            $this->saveCacheFile($this->idsCacheFilename, $this->questionIds);
+            $this->questionIdsCache->write($this->questionIds);
         }
     }
 
@@ -112,7 +147,10 @@ class Backlog
     * @access   public
     */
     public function fetchQuestionData() {
-        $this->checkCachExpiration($this->dataCacheFilename, $this->dataCacheExpiration);
+        if ($this->questionDataCache->isExpired()) {
+            return;
+        }
+
         $this->getQuestionIds();
         foreach (array_chunk($this->questionIds, 100) as $questionsBatch) {
 
@@ -137,21 +175,8 @@ class Backlog
                 ]
             )));
 
-            $this->questionsData = array_merge($this->questionsData, $apiData->items);
-            $this->saveCacheFile($this->dataCacheFilename, $this->questionsData);
+            $this->questionDataCache->write($this->questionsData = array_merge($this->questionsData, $apiData->items));
         }
-    }
-
-    /**
-    * Saves a cache file
-    *
-    * @access   public
-    * @param    string  $cacheFilePath
-    * @param    object  $cacheFileContents
-    */
-    public function saveCacheFile($cacheFilePath, $cacheFileContents) {
-        file_put_contents($cacheFilePath, json_encode($cacheFileContents), LOCK_EX);
-        chmod($cacheFilePath, 0604);
     }
 
     /**
@@ -160,7 +185,7 @@ class Backlog
     * @access   public
     */
     public function getQuestionIds() {
-        $this->questionIds = json_decode(file_get_contents($this->idsCacheFilename));
+        $this->questionIds = $this->questionIdsCache->read();
     }
 
     /**
@@ -169,21 +194,7 @@ class Backlog
     * @access   public
     */
     public function getQuestionData() {
-        $this->questionsData = json_decode(file_get_contents($this->dataCacheFilename));
-    }
-
-    /**
-    * Sets the cache dir and generates cache paths
-    *
-    * @access   public
-    * @param    string  $cacheDir
-    */
-    public function setCacheDir($cacheDir) {
-        if (is_dir($cacheDir)) {
-            $this->cacheDir = $cacheDir;
-            $this->setIdsCacheFilePath();
-            $this->setDataCacheFilePath();
-        }
+        $this->questionsData = $this->questionDataCache->read();
     }
 
     /**
@@ -193,55 +204,7 @@ class Backlog
     * @param    string  $dataSource
     */
     public function setDataSource($dataSource) {
-        $this->dataSource = $dataSource;
-    }
-
-    /**
-    * Sets path for the question IDs cache file
-    *
-    * @access   public
-    */
-    public function setIdsCacheFilePath() {
-        $this->idsCacheFilename = $this->cacheDir . '/'
-            . $this->dataSource . '_backlog_ids.cache.json';
-    }
-
-    /**
-    * Sets path for the questions data cache file
-    *
-    * @access   public
-    */
-    public function setDataCacheFilePath() {
-        $this->dataCacheFilename = $this->cacheDir . '/'
-            . $this->dataSource . '_backlog_data.cache.json';
-    }
-
-    /**
-    * Sets the expiration in seconds for the cached files
-    *
-    * @access   public
-    * @param    array   $expirationTimes  The expiration times for cache files
-    */
-    public function setCacheExpirations(Array $expirationTimes) {
-        if (array_key_exists('ids', $expirationTimes)) {
-            $this->idsCacheExpiration = $expirationTimes['ids'];
-        }
-        if (array_key_exists('data', $expirationTimes)) {
-            $this->dataCacheExpiration = $expirationTimes['data'];
-        }
-    }
-
-    /**
-    * Checks if cache file is expired and if not then bail
-    *
-    * @access   public
-    * @param    string  $cacheFilename
-    * @param    int     $expirationTime
-    */
-    public function checkCachExpiration($cacheFilename, $expirationTime) {
-        if (file_exists($cacheFilename) && $expirationTime > (time() - filemtime($cacheFilename))) {
-            exit;
-        }
+        $this->dataSource = (string) $dataSource;
     }
 
     /**
