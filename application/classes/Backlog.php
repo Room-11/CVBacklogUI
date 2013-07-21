@@ -18,16 +18,18 @@ class Backlog
     private $questionDataCache;
     private $tbodyHtmlCache;
 
-    public function __construct($dataSource, $cacheDir, Array $expirationTimes) {
+    public function __construct($dataSource, $cacheDir, Array $expirationTimes)
+    {
         $this->setDataSource($dataSource);
 
         $dataSourceDir           = $cacheDir . '/' . $this->dataSource;
         $this->questionIdsCache  = new FileCache($dataSourceDir . '_backlog_ids.cache.json', $expirationTimes['ids']);
         $this->questionDataCache = new FileCache($dataSourceDir . '_backlog_data.cache.json', $expirationTimes['data']);
-        $this->tbodyHtmlCache    = new FileCache($dataSourceDir . '_tbody.cache.txt', $expirationTimes['ids']);
+        $this->tbodyHtmlCache    = new FileCache($dataSourceDir . '_tbody.cache.json', $expirationTimes['ids']);
     }
 
-    public function fetchChatQuestionIds() {
+    public function fetchChatQuestionIds()
+    {
         if (!$this->questionIdsCache->isExpired()) {
             return;
         }
@@ -49,7 +51,8 @@ class Backlog
         $this->questionIdsCache->write($this->questionIds);
     }
 
-    public function fetchApiQuestionIds($page = 1) {
+    public function fetchApiQuestionIds($page = 1)
+    {
         if (!$this->questionIdsCache->isExpired()) {
             return;
         }
@@ -90,7 +93,8 @@ class Backlog
         }
     }
 
-    public function updateCacheWithQuestionData() {
+    public function updateCacheWithQuestionData()
+    {
         if (!$this->questionDataCache->isExpired()) {
             return;
         }
@@ -123,11 +127,13 @@ class Backlog
         }
     }
 
-    public function getQuestionIds() {
+    public function getQuestionIds()
+    {
         $this->questionIds = $this->questionIdsCache->read();
     }
 
-    public function setQuestionsData() {
+    public function setQuestionsData()
+    {
         $this->questionsData = array_map(
             function($questionData) {
                 return new QuestionItem($questionData);
@@ -140,7 +146,8 @@ class Backlog
         ]);
     }
 
-    public function getTbodyData() {
+    public function getTbodyData()
+    {
         $this->tbodyData = $this->tbodyHtmlCache->read();
     }
 
@@ -151,7 +158,8 @@ class Backlog
     /**
      * @return bool|string
      */
-    public function renderView($view, Array $viewVars = [], $returnOutput = false) {
+    public function renderView($view, Array $viewVars = [], $returnOutput = false)
+    {
         $viewPath = '../application/views/' . $view;
         if (file_exists($viewPath)) {
             foreach ($viewVars as $varName => $varValue) {
@@ -170,6 +178,19 @@ class Backlog
             }
         }
         return false;
+    }
+
+    public function debugDump($varDump = false)
+    {
+        if ($varDump) {
+            var_dump($this,
+                $this->questionIdsCache->read(),
+                $this->questionDataCache->read());
+        } else {
+            print_r($this);
+            print_r($this->questionIdsCache->read());
+            print_r($this->questionDataCache->read());
+        }
     }
 
 }

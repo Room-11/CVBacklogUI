@@ -8,6 +8,8 @@ Bugs
 ===========
 Head over to the bugs listing. and if you want to take on a bug please do.
 
+To get a debug dump add this query to the URL `?debug` for API or `?chatroom&debug` for Chatroom.
+
 
 Coding Style
 ===========

@@ -1,9 +1,9 @@
 <?php
 
 
-require '../application/classes/file_cache.php';
-require '../application/classes/question.php';
-require '../application/classes//backlog.php';
+require '../application/classes/FileCache.php';
+require '../application/classes/QuestionItem.php';
+require '../application/classes//Backlog.php';
 
 
 // compress output
@@ -25,11 +25,8 @@ if ($chatRoomSource) {
 
 // only have cron perform a cache update
 if ('cv-pls' === $userAgent) {
-    if ($chatRoomSource) {
-        $backlog->fetchChatQuestionIds();
-    } else {
-        $backlog->fetchApiQuestionIds();
-    }
+    $backlog->fetchChatQuestionIds();
+    $backlog->fetchApiQuestionIds();
     $backlog->updateCacheWithQuestionData();
     $backlog->setQuestionsData();
     exit;
@@ -40,10 +37,10 @@ if ('cv-pls' === $userAgent) {
 $backlog->getTbodyData();
 
 
-// allow dumping of dataset
+// dump cached data and object
 if (isset($_GET['debug'])) {
     header('Content-Type: text/plain; charset=utf-8');
-    var_dump($backlog);
+    $backlog->debugDump();
     exit;
 }
 
@@ -151,9 +148,7 @@ echo ($chatRoomSource)
 <th class='stats' colspan='2'>
 <small><strong>Displaying</strong> <span id='questions-count'>0</span> / <?php
 
-echo (empty($backlog->tbodyData->count))
-    ? 0
-    : $backlog->tbodyData->count;
+echo (empty($backlog->tbodyData->count)) ? 0 : $backlog->tbodyData->count;
 
 ?></small>
 </th>
@@ -170,7 +165,7 @@ echo (empty($backlog->tbodyData->count))
 <tbody id='data-table-body'><?php
 
 echo (empty($backlog->tbodyData->content))
-    ? "<tr colspan='5'><td class='failure'>Backlog data request failed. Try again in a few minutes.</td></tr>\n"
+    ? "<tr colspan='5'><td class='error-message'>Cache file unavailable. Try again in a few minutes.</td></tr>\n"
     : $backlog->tbodyData->content;
 
 ?>

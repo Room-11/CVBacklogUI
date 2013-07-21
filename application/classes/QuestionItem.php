@@ -10,14 +10,16 @@
  */
 class QuestionItem
 {
-    public function __construct(stdClass $questionData) {
+    public function __construct(stdClass $questionData)
+    {
         $this->questionData = $questionData;
     }
 
     /**
      * @return   string
      */
-    public function getCloseReasonName() {
+    public function getCloseReasonName()
+    {
         return [
             'dupe' => 'Duplicate',
             'ot'   => 'Off-Topic',
@@ -30,7 +32,8 @@ class QuestionItem
     /**
      * @return   string
      */
-    public function getCloseReasonAcronymn() {
+    public function getCloseReasonAcronymn()
+    {
         switch ($this->questionData->closed_reason) {
             case 'duplicate':
             case 'exact duplicate':
@@ -58,7 +61,8 @@ class QuestionItem
     /**
      * @return   string
      */
-    public function getQuestionType() {
+    public function getQuestionType()
+    {
         if ($this->isAutoDeleteQuestion()) {
             return 'adelv';
         } else if ($this->isCloseQuestion()) {
@@ -76,16 +80,18 @@ class QuestionItem
     /**
      * @return   bool
      */
-    public function isDeleteQuestion() {
+    public function isDeleteQuestion()
+    {
         return (isset($this->questionData->closed_date)
-            && 172800 < (time() - $this->questionData->closed_date)
-            && 0 === $this->questionData->reopen_vote_count);
+            && ((172800 < (time() - $this->questionData->closed_date) && 0 === $this->questionData->reopen_vote_count)
+            || -3 >= $this->questionData->score));
     }
 
     /**
      * @return   bool
      */
-    public function isReopenQuestion() {
+    public function isReopenQuestion()
+    {
         return (isset($this->questionData->closed_date)
             && 0 < $this->questionData->reopen_vote_count);
     }
@@ -93,7 +99,8 @@ class QuestionItem
     /**
      * @return   bool
      */
-    public function isAutoDeleteQuestion() {
+    public function isAutoDeleteQuestion()
+    {
 
         $questionAge = (time() - $this->questionData->creation_date);
 
@@ -134,7 +141,8 @@ class QuestionItem
     /**
      * @return   bool
      */
-    public function isCloseQuestion() {
+    public function isCloseQuestion()
+    {
         return (!isset($this->questionData->closed_date)
             && 0 < $this->questionData->close_vote_count);
     }
@@ -142,7 +150,8 @@ class QuestionItem
     /**
      * @return   bool
      */
-    public function isReviewQuestion() {
+    public function isReviewQuestion()
+    {
         return (!isset($this->questionData->closed_date)
             && 0 === $this->questionData->close_vote_count
             && 0 === $this->questionData->delete_vote_count
