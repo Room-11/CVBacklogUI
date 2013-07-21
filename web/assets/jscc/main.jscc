@@ -183,11 +183,36 @@ var CvPlsBacklog = {};
     CvPlsBacklog.CheckboxHandler.prototype.element         = null;
     CvPlsBacklog.CheckboxHandler.prototype.dataTable       = null;
     CvPlsBacklog.CheckboxHandler.prototype.settingsManager = null;
+    CvPlsBacklog.CheckboxHandler.prototype.settingName     = null;
+
+    CvPlsBacklog.CheckboxHandler.prototype.init = function()
+    {
+        this.element.checked = this.getCurrentSetting();
+
+        this.element.addEventListener('change', this.onChange.bind(this), false);
+        this.onChange();
+    };
 
     CvPlsBacklog.CheckboxHandler.prototype.reset = function()
     {
         this.element.checked = this.element.hasAttribute('checked');
         this.onChange();
+    };
+
+    CvPlsBacklog.CheckboxHandler.prototype.getCurrentSetting = function()
+    {
+        var storedValue = this.settingsManager.getSetting(this.settingName);
+
+        if (storedValue === undefined) {
+            return this.element.hasAttribute('checked');
+        }
+
+        return Boolean(storedValue);
+    };
+
+    CvPlsBacklog.CheckboxHandler.prototype.saveCurrentSetting = function()
+    {
+        this.settingsManager.saveSetting(this.settingName, this.element.checked);
     };
 }());
 
@@ -200,29 +225,18 @@ var CvPlsBacklog = {};
         this.element = element;
         this.dataTable = dataTable;
         this.settingsManager = settingsManager;
+
+        this.settingName = 'tableScroll';
     };
 
     // Extend base class
     CvPlsBacklog.TableScrollCheckboxHandler.prototype = new CvPlsBacklog.CheckboxHandler();
 
-    CvPlsBacklog.TableScrollCheckboxHandler.prototype.init = function()
-    {
-        var currentSetting = this.settingsManager.getSetting('tableScroll');
-        if (currentSetting === null) {
-            this.element.checked = true;
-        } else {
-            this.element.checked = Boolean(currentSetting);
-        }
-
-        this.element.addEventListener('change', this.onChange.bind(this), false);
-        this.onChange();
-    };
-
     CvPlsBacklog.TableScrollCheckboxHandler.prototype.onChange = function()
     {
         this.dataTable.setScrollList(this.element.checked);
 
-        this.settingsManager.saveSetting('tableScroll', this.element.checked);
+        this.saveCurrentSetting();
     };
 }());
 
@@ -235,67 +249,21 @@ var CvPlsBacklog = {};
         this.element = element;
         this.dataTable = dataTable;
         this.settingsManager = settingsManager;
+
+        this.settingName = 'linkTarget';
     };
 
     // Extend base class
     CvPlsBacklog.LinkTargetCheckboxHandler.prototype = new CvPlsBacklog.CheckboxHandler();
 
-    CvPlsBacklog.LinkTargetCheckboxHandler.prototype.init = function()
-    {
-        var currentSetting = this.settingsManager.getSetting('linkTarget');
-        if (currentSetting === null) {
-            this.element.checked = true;
-        } else {
-            this.element.checked = Boolean(currentSetting);
-        }
-
-        this.element.addEventListener('change', this.onChange.bind(this), false);
-        this.onChange();
-    };
-
     CvPlsBacklog.LinkTargetCheckboxHandler.prototype.onChange = function()
     {
         this.dataTable.setOpenInTabs(this.element.checked);
 
-        this.settingsManager.saveSetting('linkTarget', this.element.checked);
+        this.saveCurrentSetting();
     };
 }());
-/*
-(function() { // class TableRefreshCheckboxHandler extends CheckboxHandler
-    "use strict";
 
-    // Constructor
-    CvPlsBacklog.TableRefreshCheckboxHandler = function(element, dataTable, settingsManager)
-    {
-        this.element = element;
-        this.dataTable = dataTable;
-        this.settingsManager = settingsManager;
-    };
-
-    // Extend base class
-    CvPlsBacklog.TableRefreshCheckboxHandler.prototype = new CvPlsBacklog.CheckboxHandler();
-
-    CvPlsBacklog.TableRefreshCheckboxHandler.prototype.init = function()
-    {
-        var currentSetting = this.settingsManager.getSetting('autoRefresh');
-        if (currentSetting === null) {
-            this.element.checked = true;
-        } else {
-            this.element.checked = Boolean(currentSetting);
-        }
-
-        this.element.addEventListener('change', this.onChange.bind(this), false);
-        this.onChange();
-    };
-
-    CvPlsBacklog.TableRefreshCheckboxHandler.prototype.onChange = function()
-    {
-        this.dataTable.setAutoRefresh(this.element.checked);
-
-        this.settingsManager.saveSetting('autoRefresh', this.element.checked);
-    };
-}());
-*/
 (function() { // class VoteTypeCheckboxHandler extends CheckboxHandler
     "use strict";
 
@@ -305,28 +273,15 @@ var CvPlsBacklog = {};
         this.element = element;
         this.dataTable = dataTable;
         this.settingsManager = settingsManager;
+
+        this.voteType = element.id.split('-').pop();
+        this.settingName = 'voteType-' + this.voteType;
     };
 
     // Extend base class
     CvPlsBacklog.VoteTypeCheckboxHandler.prototype = new CvPlsBacklog.CheckboxHandler();
 
     CvPlsBacklog.VoteTypeCheckboxHandler.prototype.voteType = '';
-
-    CvPlsBacklog.VoteTypeCheckboxHandler.prototype.init = function()
-    {
-        this.voteType = this.element.id.split('-').pop();
-
-        var currentSetting = this.settingsManager.getSetting('voteType-' + this.voteType);
-        if (currentSetting === null) {
-            this.element.checked = true;
-        } else {
-            this.element.checked = Boolean(currentSetting);
-        }
-
-        this.element.addEventListener('change', this.onChange.bind(this), false);
-
-        this.onChange();
-    };
 
     CvPlsBacklog.VoteTypeCheckboxHandler.prototype.onChange = function()
     {
@@ -336,7 +291,7 @@ var CvPlsBacklog = {};
             this.dataTable.showVoteType(this.voteType);
         }
 
-        this.settingsManager.saveSetting('voteType-' + this.voteType, this.element.checked);
+        this.saveCurrentSetting();
     };
 }());
 
@@ -407,14 +362,6 @@ var CvPlsBacklog = {};
     );
     resetHandler.addControl(control);
     control.init();
-
-    // control = new CvPlsBacklog.TableRefreshCheckboxHandler(
-        // document.getElementById('check-refresh'),
-        // dataTable,
-        // settingsManager
-    // );
-    // resetHandler.addControl(control);
-    // control.init();
 
     for (i = 0, l = voteTypes.length; i < l; i++) {
         control = new CvPlsBacklog.VoteTypeCheckboxHandler(
