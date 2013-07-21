@@ -40,7 +40,7 @@ $backlog->getTbodyData();
 // dump cached data and object
 if (isset($_GET['debug'])) {
     header('Content-Type: text/plain; charset=utf-8');
-    $backlog->debugDump();
+    $backlog->debugDump('var_dump' === $_GET['debug']);
     exit;
 }
 
