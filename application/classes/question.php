@@ -114,12 +114,12 @@ class QuestionItem
         } else if (!$this->questionData->is_answered
             && 0 === $this->questionData->reopen_vote_count
             && 0 >= $this->questionData->score
+            && (isset($this->questionData->close_reason) && 'dupe' !== $this->getCloseReasonAcronymn($this->questionData->close_reason))
             && !isset($this->questionData->locked_date)
-            && 777600 < (time() - $this->questionData->closed_date)
-            && 'dupe' !== $this->getCloseReasonAcronymn($this->questionData->close_reason)
+            && (isset($this->questionData->closed_date) && 777600 < (time() - $this->questionData->closed_date))
             && (isset($this->questionData->last_edit_date) && 777600 > (time() - $this->questionData->last_edit_date))) {
 
-            if (!isset($this->questionData->answers)) {
+            if (isset($this->questionData->answers)) {
                 foreach ($this->questionData->answers as $answer) {
                     if (0 > $answer->score) {
                         return false;

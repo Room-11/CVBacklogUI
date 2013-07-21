@@ -162,7 +162,7 @@ foreach ($backlog->questionsData as $question) {
 ?><tr class='<?php echo $question->getQuestionType(); ?>'>
 <td class='c4'<?php
 
-    if (isset($question->questionData->closed_reason)) {
+    if (isset($question->questionData->close_reason)) {
         echo " title='" . $question->getCloseReasonName() . "'>" . $question->getCloseReasonAcronymn();
     } else {
         echo '>-';
