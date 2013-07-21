@@ -12,16 +12,19 @@ class Backlog
 {
     public  $questionIds = [];
     public  $questionsData = [];
+    public  $tbodyHtml;
     private $dataSource;
     private $questionIdsCache;
     private $questionDataCache;
+    private $tbodyHtmlCache;
 
     public function __construct($dataSource, $cacheDir, Array $expirationTimes) {
         $this->setDataSource($dataSource);
 
         $dataSourceDir           = $cacheDir . '/' . $this->dataSource;
-        $this->questionIdsCache  = new JsonFileCache($dataSourceDir . '_backlog_ids.cache.json', $expirationTimes['ids']);
-        $this->questionDataCache = new JsonFileCache($dataSourceDir . '_backlog_data.cache.json', $expirationTimes['data']);
+        $this->questionIdsCache  = new FileCache($dataSourceDir . '_backlog_ids.cache.json', $expirationTimes['ids']);
+        $this->questionDataCache = new FileCache($dataSourceDir . '_backlog_data.cache.json', $expirationTimes['data']);
+        $this->tbodyHtmlCache    = new FileCache($dataSourceDir . '_tbody.cache.txt', $expirationTimes['ids']);
     }
 
     public function fetchChatQuestionIds() {
@@ -131,18 +134,42 @@ class Backlog
             },
             $this->questionDataCache->read()
         );
+        $this->tbodyHtmlCache->write([
+            'count'   => count($this->questionsData),
+            'content' => $this->renderView('tbody.php', ['questionsData' => $this->questionsData], true),
+        ]);
+    }
+
+    public function getTbodyData() {
+        $this->tbodyData = $this->tbodyHtmlCache->read();
     }
 
     public function setDataSource($dataSource) {
         $this->dataSource = (string) $dataSource;
     }
 
-    public function getQuestionsCount() {
-        if (!property_exists($this, 'questionsCount')) {
-            $this->questionsCount = count($this->questionsData);
-        }
-        return $this->questionsCount;
-    }
+    /**
+     * @return bool|string
+     */
+    public function renderView($view, Array $viewVars = [], $returnOutput = false) {
+        $viewPath = '../application/views/' . $view;
+        if (file_exists($viewPath)) {
+            foreach ($viewVars as $varName => $varValue) {
+                $$varName = $varValue;
+            }
 
+            ob_start();
+            require_once $viewPath;
+            $viewOutput = ob_get_contents();
+            ob_end_clean();
+
+            if ($returnOutput) {
+                return $viewOutput;
+            } else {
+                echo $viewOutput;
+            }
+        }
+        return false;
+    }
 
 }

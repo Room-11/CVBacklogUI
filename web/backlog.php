@@ -1,7 +1,7 @@
 <?php
 
 
-require '../application/classes/json_file_cache.php';
+require '../application/classes/file_cache.php';
 require '../application/classes/question.php';
 require '../application/classes//backlog.php';
 
@@ -31,12 +31,13 @@ if ('cv-pls' === $userAgent) {
         $backlog->fetchApiQuestionIds();
     }
     $backlog->updateCacheWithQuestionData();
+    $backlog->setQuestionsData();
     exit;
 }
 
 
-// get the cached dataset
-$backlog->setQuestionsData();
+// get the TBODY data
+$backlog->getTbodyData();
 
 
 // allow dumping of dataset
@@ -47,23 +48,28 @@ if (isset($_GET['debug'])) {
 }
 
 
-// set some headers, some are meant for possible future needs
-header('Cache Control: max-age=3600, must-revalidate, private'); // cache settings
-//header('Content-Type: application/xhtml+xml; charset=utf-8');  // XHTML5 (buggy)
-header('Content-Type: text/html; charset=utf-8');                // document Mime
-header('X-Frame-Options: DENY');                                 // prevent click-jacking attacks
-header('X-Robots-Tag: noarchive, noodp, nofollow, index');       // search engine restrictions
-
-// Determine If Internet Explorer
-if (false !== strpos($userAgent, 'MSIE'))
-{
+if (false !== strpos($userAgent, 'MSIE')) {
     header('MSThemeCompatible: no');           // disable theming
     header('X-Content-Type-Options: nosniff'); // prevent MIME sniffing
-    header('X-XSS-Protection: 1; mode=block'); // prevent XSS Attacks
+    header('X-XSS-Protection: 1; mode=block'); // prevent XSS attacks
 }
 
 // Content Security Policy (http://www.w3.org/TR/CSP/)
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; object-src 'none'; style-src 'self' https://fonts.googleapis.com; img-src 'self'; media-src 'none'; frame-src 'none'; font-src 'self' https://themes.googleusercontent.com; connect-src 'self'");
+$cspPolicy = "default-src 'self'; "
+    . "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
+    . "object-src 'none'; "
+    . "style-src 'self' https://fonts.googleapis.com; "
+    . "img-src 'self'; "
+    . "media-src 'none'; "
+    . "frame-src 'none'; "
+    . "font-src 'self' https://themes.googleusercontent.com; "
+    . "connect-src 'self'";
+
+header('Content-Security-Policy: ' . $cspPolicy);
+header('Cache Control: max-age=3600, must-revalidate, private');
+header('Content-Type: text/html; charset=utf-8');
+header('X-Frame-Options: DENY');
+header('X-Robots-Tag: noarchive, noodp, nofollow, noindex');
 
 
 ?>
@@ -73,7 +79,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-i
 <meta charset='utf-8' />
 <title>cv-pls Backlog beta (un-official)</title>
 <meta content='A fancy smancy cv-pls backlog interface' name='description' />
-<meta content='noimageindex, noodp, noarchive, nofollow, index' name='robots' />
+<meta content='noimageindex, noodp, noarchive, nofollow, noindex' name='robots' />
 <meta content='width=device-width' name='viewport' />
 <!--[if IE]>
 <meta content='#ffffff' name='msapplication-TileColor' />
@@ -143,7 +149,13 @@ echo ($chatRoomSource)
 <table class='scroll table table-bordered table-condensed table-hover' id='data-table'>
 <thead><tr>
 <th class='stats' colspan='2'>
-<small><strong>Displaying</strong> <span id='questions-count'>0</span> / <?php echo $backlog->getQuestionsCount(); ?></small>
+<small><strong>Displaying</strong> <span id='questions-count'>0</span> / <?php
+
+echo (empty($backlog->tbodyData->count))
+    ? 0
+    : $backlog->tbodyData->count;
+
+?></small>
 </th>
 <th class='c1'>Votes</th>
 </tr><tr>
@@ -157,59 +169,9 @@ echo ($chatRoomSource)
 </tr></thead>
 <tbody id='data-table-body'><?php
 
-foreach ($backlog->questionsData as $question) {
-
-?><tr class='<?php echo $question->getQuestionType(); ?>'>
-<td class='c4'<?php
-
-    if (isset($question->questionData->closed_reason)) {
-        echo " title='" . $question->getCloseReasonName() . "'>" . $question->getCloseReasonAcronymn();
-    } else {
-        echo '>-';
-    }
-
-?></td>
-<td class='title'><a href='<?php echo $question->questionData->link; ?>'><?php
-
-    // has to be a better way to truncate. CSS text-overflow??
-    $shortTitle = html_entity_decode($question->questionData->title, ENT_QUOTES);
-    echo (90 < strlen($shortTitle))
-        ? htmlentities(substr($shortTitle, 0, 90), ENT_QUOTES) . '...'
-        : $question->questionData->title;
-
-?></a><?php
-
-    if (isset($question->questionData->locked_date)) {
-        echo "<i class='icon-locked' title='Question is locked'></i>\n";
-    }
-
-    if (isset($question->questionData->protected_date)) {
-        echo "<i class='icon-protected' title='Question is protected'></i>\n";
-    }
-
-    if (isset($question->questionData->community_owned_date)) {
-        echo "<i class='icon-wikied' title='Question is community wikied'></i>\n";
-    }
-
-    if (isset($question->questionData->accepted_answer_id)) {
-        echo "<i class='icon-accepted' title='Question has an accepted answer'></i>\n";
-    }
-
-?></td>
-<td class='c3'><?php echo (0 == $question->questionData->close_vote_count) ? '-' : $question->questionData->close_vote_count; ?></td>
-<td class='c3'><?php echo (0 == $question->questionData->delete_vote_count) ? '-' : $question->questionData->delete_vote_count; ?></td>
-<td class='c3'><?php echo (0 == $question->questionData->reopen_vote_count) ? '-' : $question->questionData->reopen_vote_count; ?></td>
-</tr><?php
-
-}
-
-if (0 >= $backlog->getQuestionsCount()) {
-
-?>
-<tr colspan='5'><td class='failure'>Backlog data request failed. Try again in a few minutes.</td></tr>
-<?php
-
-}
+echo (empty($backlog->tbodyData->content))
+    ? "<tr colspan='5'><td class='failure'>Backlog data request failed. Try again in a few minutes.</td></tr>\n"
+    : $backlog->tbodyData->content;
 
 ?>
 </tbody></table>

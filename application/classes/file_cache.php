@@ -5,7 +5,7 @@
  *
  * @author       Marco Pivetta <ocramius@gmail.com>
  */
-class JsonFileCache
+class FileCache
 {
     private $path;
     private $ttl;
@@ -68,6 +68,8 @@ class JsonFileCache
      */
     public function read()
     {
-        return json_decode(file_get_contents($this->path));
+        return (file_exists($this->path))
+            ? json_decode(file_get_contents($this->path))
+            : '';
     }
 }
