@@ -25,8 +25,11 @@ if ($chatRoomSource) {
 
 // only have cron perform a cache update
 if ('cv-pls' === $userAgent) {
-    $backlog->fetchChatQuestionIds();
-    $backlog->fetchApiQuestionIds();
+    if ($chatRoomSource) {
+        $backlog->fetchChatQuestionIds();
+    } else {
+        $backlog->fetchApiQuestionIds();
+    }
     $backlog->updateCacheWithQuestionData();
     $backlog->setQuestionsData();
     exit;
@@ -40,7 +43,7 @@ $backlog->getTbodyData();
 // dump cached data and object
 if (isset($_GET['debug'])) {
     header('Content-Type: text/plain; charset=utf-8');
-    $backlog->debugDump();
+    $backlog->debugDump('var_dump' === $_GET['debug']);
     exit;
 }
 
@@ -74,7 +77,7 @@ header('X-Robots-Tag: noarchive, noodp, nofollow, noindex');
 <html lang='en' xmlns='http://www.w3.org/1999/xhtml'>
 <head>
 <meta charset='utf-8' />
-<title>cv-pls Backlog beta (un-official)</title>
+<title>cv-pls Backlog (beta)</title>
 <meta content='A fancy smancy cv-pls backlog interface' name='description' />
 <meta content='noimageindex, noodp, noarchive, nofollow, noindex' name='robots' />
 <meta content='width=device-width' name='viewport' />
@@ -106,7 +109,7 @@ echo ($chatRoomSource)
 ?>
 </small>
 </div>
-<h1>[cv-pls] Backlog <small>beta <em>(un-official)</em></small></h1>
+<h1>[cv-pls] Backlog <small>beta</small></h1>
 <form class='form-inline' id='options-form'>
 <fieldset>
 <legend>Options</legend>
@@ -165,7 +168,7 @@ echo (empty($backlog->tbodyData->count)) ? 0 : $backlog->tbodyData->count;
 <tbody id='data-table-body'><?php
 
 echo (empty($backlog->tbodyData->content))
-    ? "<tr colspan='5'><td class='error-message'>Cache file unavailable. Try again in a few minutes.</td></tr>\n"
+    ? "<tr colspan='5'><td class='error-message'>Cache file(s) currently unavailable</td></tr>\n"
     : $backlog->tbodyData->content;
 
 ?>
