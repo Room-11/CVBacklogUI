@@ -20,13 +20,14 @@ class QuestionItem
      */
     public function getCloseReasonName()
     {
-        return [
+        $reasons = [
             'dupe' => 'Duplicate',
             'ot'   => 'Off-Topic',
             'pob'  => 'Primarily Opinion Based',
             'tb'   => 'Too Broad',
             'uwya' => 'Unclear What You&#39;re Asking',
-        ][$this->getCloseReasonAcronymn()];
+        ];
+        return $reasons[$this->getCloseReasonAcronymn()];
     }
 
     /**
