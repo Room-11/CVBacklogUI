@@ -168,7 +168,7 @@ echo (empty($backlog->tbodyData->count)) ? 0 : $backlog->tbodyData->count;
 <tbody id='data-table-body'><?php
 
 echo (empty($backlog->tbodyData->content))
-    ? "<tr><td colspan='5' class='error-message'>Cache file(s) currently unavailable</td></tr>\n"
+    ? "<tr class='error'><td colspan='5' class='error-message'>Cache file(s) currently unavailable</td></tr>\n"
     : $backlog->tbodyData->content;
 
 ?>
