@@ -4,7 +4,6 @@
  * Simple file-based cache
  *
  * @author       Marco Pivetta <ocramius@gmail.com>
- * @copyright    2013 © Kyra D. <kyra@existing.me>
  */
 class JsonFileCache
 {

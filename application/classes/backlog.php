@@ -3,7 +3,7 @@
 /**
  * -
  *
- * @oauthor  Kyra D. <kyra@existing.me>
+ * @author  Kyra D. <kyra@existing.me>
  * @method   void __construct(string $dataSource)
  * @todo     -
  * @uses     -
