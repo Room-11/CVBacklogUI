@@ -119,7 +119,7 @@ echo ($chatRoomSource)
 <label class='checkbox ro'><input id='check-ro' type='checkbox' />re-open</label>
 <label class='checkbox rv'><input id='check-rv' type='checkbox' />review</label>
 <label class='checkbox adelv'><input id='check-adelv' type='checkbox' />auto-deleting</label><br />
-<label class='checkbox'><input id='check-scroll' type='checkbox' />scrolled list</label>
+<label class='checkbox disabled'><input disabled='disabled' id='check-scroll' type='checkbox' />scrolled list</label>
 <label class='checkbox'><input id='check-tabs' type='checkbox' />open in tabs</label>
 <span class='disabled'>refresh every
 <select disabled='disabled' id='refresh-interval'>
@@ -155,20 +155,16 @@ echo (empty($backlog->tbodyData->count)) ? 0 : $backlog->tbodyData->count;
 
 ?></small>
 </th>
-<th class='c1'>Votes</th>
+<th class='votes' colspan='3'>Votes</th>
 </tr><tr>
-<th class='c4 border'>
-<div class='go-top'><div>
-<a class='icon-up' href='#menu' title='Go to top'></a><br />
-<small>G<br />O</small><br />
-<a class='icon-down' href='#footer' title='Go to bottom'></a></div></div>
+<th class='corner'>
 <a href='https://github.com/cv-pls/site/blob/cv-pls.com/cv-pls_chat_docs.md#close-vote-acronyms' target='_blank'>Reason</a></th>
-<th class='c5'>Title</th><th class='c3'>Close</th><th class='c3'>Delete</th><th class='c2'>Open</th>
+<th>Title</th><th>Close</th><th>Delete</th><th>Open</th>
 </tr></thead>
 <tbody id='data-table-body'><?php
 
 echo (empty($backlog->tbodyData->content))
-    ? "<tr class='error'><td colspan='5' class='error-message'>Cache file(s) currently unavailable</td></tr>\n"
+    ? "<tr class='error-message'><td colspan='5'>Cache file(s) currently unavailable</td></tr>\n"
     : $backlog->tbodyData->content;
 
 ?>

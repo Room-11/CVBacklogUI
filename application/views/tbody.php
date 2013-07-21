@@ -3,7 +3,7 @@
 foreach ($questionsData as $question) {
 
 ?><tr class='<?php echo $question->getQuestionType(); ?>'>
-<td class='c4'<?php
+<td<?php
 
     if (isset($question->questionData->closed_reason)) {
         echo " title='" . $question->getCloseReasonName() . "'>" . $question->getCloseReasonAcronymn();
@@ -12,7 +12,7 @@ foreach ($questionsData as $question) {
     }
 
 ?></td>
-<td class='title'><a href='<?php echo $question->questionData->link; ?>'><?php
+<td><a href='<?php echo $question->questionData->link; ?>'><?php
 
     // has to be a better way to truncate. CSS text-overflow??
     $shortTitle = html_entity_decode($question->questionData->title, ENT_QUOTES);
@@ -39,9 +39,9 @@ foreach ($questionsData as $question) {
     }
 
 ?></td>
-<td class='c3'><?php echo (0 == $question->questionData->close_vote_count) ? '-' : $question->questionData->close_vote_count; ?></td>
-<td class='c3'><?php echo (0 == $question->questionData->delete_vote_count) ? '-' : $question->questionData->delete_vote_count; ?></td>
-<td class='c3'><?php echo (0 == $question->questionData->reopen_vote_count) ? '-' : $question->questionData->reopen_vote_count; ?></td>
+<td><?php echo (0 == $question->questionData->close_vote_count) ? '-' : $question->questionData->close_vote_count; ?></td>
+<td><?php echo (0 == $question->questionData->delete_vote_count) ? '-' : $question->questionData->delete_vote_count; ?></td>
+<td><?php echo (0 == $question->questionData->reopen_vote_count) ? '-' : $question->questionData->reopen_vote_count; ?></td>
 </tr><?php
 
 }

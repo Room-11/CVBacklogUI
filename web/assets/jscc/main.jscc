@@ -55,7 +55,7 @@ var CvPlsBacklog = {};
 
         linkClickBound = linkClick.bind(this);
 
-        rows = this.element.querySelectorAll('tbody tr:not(.error)');
+        rows = this.element.querySelectorAll('tbody tr:not(.error-message)');
         for (i = 0, rowCount = rows.length; i < rowCount; i++) {
             if (this.rowCounts[rows[i].className] === undefined) {
                 this.rowCounts[rows[i].className] = 0;
