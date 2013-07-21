@@ -8,7 +8,15 @@ Bugs
 ===========
 Head over to the bugs listing. and if you want to take on a bug please do.
 
-To get a debug dump add this query to the URL `?debug` for API or `?chatroom&debug` for Chatroom.
+To get a debug dump add the following to the URL:
+
+API
+ - print_r() `?debug`
+ - var_dump() `?debug=var_dump`
+
+Chatroom
+ - print_r() `?chatroom&debug`
+ - var_dump() `?chatroom&debug=var_dump`
 
 
 Coding Style
