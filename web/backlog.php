@@ -119,8 +119,7 @@ echo ($chatRoomSource)
 <label class='checkbox ro'><input id='check-ro' type='checkbox' />re-open</label>
 <label class='checkbox rv'><input id='check-rv' type='checkbox' />review</label>
 <label class='checkbox adelv'><input id='check-adelv' type='checkbox' />auto-deleting</label><br />
-<label class='checkbox disabled'><input disabled='disabled' id='check-scroll' type='checkbox' />scrolled list</label>
-<label class='checkbox'><input id='check-tabs' type='checkbox' />open in tabs</label>
+<label class='checkbox'><input checked='checked' id='check-tabs' type='checkbox' />open in tabs</label>
 <span class='disabled'>refresh every
 <select disabled='disabled' id='refresh-interval'>
 <option value='0' selected='selected'>0</option>

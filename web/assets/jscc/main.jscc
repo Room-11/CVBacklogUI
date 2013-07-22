@@ -94,15 +94,6 @@ var CvPlsBacklog = {};
 		this.linkTarget = openInTabs ? '_blank' : '_self';
 	};
 
-	CvPlsBacklog.DataTableHandler.prototype.setScrollList = function(scrollList)
-	{
-		if (scrollList) {
-			this.element.classList.add('show-scroll');
-		} else {
-			this.element.classList.remove('show-scroll');
-		}
-	};
-
 	CvPlsBacklog.DataTableHandler.prototype.setAutoRefresh = function(autoRefresh)
 	{
 		if (autoRefresh && this.refreshTimer === null) {
@@ -216,30 +207,6 @@ var CvPlsBacklog = {};
 	};
 }());
 
-(function() { // class TableScrollCheckboxHandler extends CheckboxHandler
-	"use strict";
-
-	// Constructor
-	CvPlsBacklog.TableScrollCheckboxHandler = function(element, dataTable, settingsManager)
-	{
-		this.element = element;
-		this.dataTable = dataTable;
-		this.settingsManager = settingsManager;
-
-		this.settingName = 'tableScroll';
-	};
-
-	// Extend base class
-	CvPlsBacklog.TableScrollCheckboxHandler.prototype = new CvPlsBacklog.CheckboxHandler();
-
-	CvPlsBacklog.TableScrollCheckboxHandler.prototype.onChange = function()
-	{
-		this.dataTable.setScrollList(this.element.checked);
-
-		this.saveCurrentSetting();
-	};
-}());
-
 (function() { // class LinkTargetCheckboxHandler extends CheckboxHandler
 	"use strict";
 
@@ -346,14 +313,6 @@ var CvPlsBacklog = {};
 
 	resetHandler = new CvPlsBacklog.FormResetHandler(document.getElementById('reset-options'));
 	resetHandler.init();
-
-	control = new CvPlsBacklog.TableScrollCheckboxHandler(
-		document.getElementById('check-scroll'),
-		dataTable,
-		settingsManager
-	);
-	resetHandler.addControl(control);
-	control.init();
 
 	control = new CvPlsBacklog.LinkTargetCheckboxHandler(
 		document.getElementById('check-tabs'),
