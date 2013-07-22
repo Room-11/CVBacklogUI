@@ -96,6 +96,17 @@ h1
 	float : right;
 	text-align : right;
 	line-height : 25px;
+	width : 105px;
+
+	&.sticky
+	{
+		margin-top : 3px;
+		position : absolute;
+		width : 225px;
+		z-index : 25;
+
+		strong {border : 0;}
+	}
 
 	strong
 	{
@@ -106,9 +117,19 @@ h1
 	small {margin : 0 5px;}
 }
 
-#data-table
+#data-table-head
 {
+	border-radius : 0 4px 0 0;
 	border-top : 0;
+	margin-bottom : 0;
+	background-color : #fff;
+
+	&.sticky
+	{
+		position : fixed;
+		top : 0;
+		width : 985px;
+	}
 
 	thead
 	{
@@ -145,6 +166,12 @@ h1
 			&:nth-child(3), &:nth-child(4), &:nth-child(5) {width : 45px;}
 		}
 	}
+}
+
+#data-table
+{
+	border-radius : 0 0 4px 4px;
+	border-top : 0;
 
 	tbody
 	{
@@ -159,6 +186,7 @@ h1
 
 			td
 			{
+				border-radius : 0;
 				text-align : center;
 
 				&:nth-child(2)

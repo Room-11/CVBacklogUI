@@ -141,6 +141,7 @@ class Backlog
             $this->questionDataCache->read()
         );
         $this->tbodyHtmlCache->write([
+            'timestamp' => time(),
             'count'   => count($this->questionsData),
             'content' => $this->renderView('tbody.php', ['questionsData' => $this->questionsData], true),
         ]);

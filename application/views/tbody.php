@@ -23,19 +23,19 @@ foreach ($questionsData as $question) {
 ?></a><?php
 
     if (isset($question->questionData->locked_date)) {
-        echo "<i class='icon-locked' title='Question is locked'></i>\n";
+        echo "<i class='icon-locked' title='Locked'></i>\n";
     }
 
     if (isset($question->questionData->protected_date)) {
-        echo "<i class='icon-protected' title='Question is protected'></i>\n";
+        echo "<i class='icon-protected' title='Protected'></i>\n";
     }
 
     if (isset($question->questionData->community_owned_date)) {
-        echo "<i class='icon-wikied' title='Question is community wikied'></i>\n";
+        echo "<i class='icon-wikied' title='Community wikied'></i>\n";
     }
 
     if (isset($question->questionData->accepted_answer_id)) {
-        echo "<i class='icon-accepted' title='Question has an accepted answer'></i>\n";
+        echo "<i class='icon-accepted' title='Has accepted answer'></i>\n";
     }
 
 ?></td>

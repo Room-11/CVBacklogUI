@@ -3,10 +3,10 @@
 /**
  * -
  *
- * @oauthor  Kyra D. <kyra@existing.me>
- * @method   void __construct()
- * @todo     -
- * @uses     -
+ * @author  Kyra D. <kyra@existing.me>
+ * @method  void __construct(stdClass $questionData)
+ * @todo    -
+ * @uses    -
  */
 class QuestionItem
 {
@@ -17,6 +17,7 @@ class QuestionItem
 
     /**
      * @return   string
+     * @todo     Change to PHP 5.5 array dereference later on
      */
     public function getCloseReasonName()
     {

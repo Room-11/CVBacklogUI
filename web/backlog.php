@@ -98,7 +98,7 @@ header('X-Robots-Tag: noarchive, noodp, nofollow, noindex');
 <?php flush(); ?>
 <body>
 <div id='data-sources'>
-<strong>Backlog Source</strong><br />
+<strong>Backlog Source</strong>
 <small>
 <?php
 
@@ -146,21 +146,22 @@ echo ($chatRoomSource)
 <span class='icon-accepted' title='Question has an accepted answer'>accepted</span>
 </fieldset>
 </form>
-<table class='scroll table table-bordered table-condensed table-hover' id='data-table'>
+<table class='table table-bordered table-condensed' id='data-table-head'>
 <thead><tr>
-<th class='stats' colspan='2'>
-<small><strong>Displaying</strong> <span id='questions-count'>0</span> / <?php
+<th class='stats' colspan='2'><small><strong>Displaying</strong> <span id='questions-count'>100</span> / <?php
 
 echo (empty($backlog->tbodyData->count)) ? 0 : $backlog->tbodyData->count;
 
-?></small>
-</th>
+?></small></th>
 <th class='votes' colspan='3'>Votes</th>
 </tr><tr>
-<th class='corner'>
-<a href='https://github.com/cv-pls/site/blob/cv-pls.com/cv-pls_chat_docs.md#close-vote-acronyms' target='_blank'>Reason</a></th>
-<th>Title</th><th>Close</th><th>Delete</th><th>Open</th>
-</tr></thead>
+<th class='corner'><a href='https://github.com/cv-pls/site/blob/cv-pls.com/cv-pls_chat_docs.md#close-vote-acronyms' target='_blank'>Reason</a></th>
+<th>Title</th>
+<th>Close</th>
+<th>Delete</th>
+<th>Open</th>
+</tr></thead></table>
+<table class='scroll table table-bordered table-condensed table-hover' id='data-table'>
 <tbody id='data-table-body'><?php
 
 echo (empty($backlog->tbodyData->content))
@@ -168,11 +169,11 @@ echo (empty($backlog->tbodyData->content))
     : $backlog->tbodyData->content;
 
 ?>
-</tbody></table>
+</tbody></table></div>
 <div id='footer'>
 <small>API data provided by the <a href='https://stackexchange.com/' target='_blank'>Stack Exchange Network</a>.
 Official Github <a href='https://github.com/PHP-Chat/CVBacklogUI' target='_blank'>CVBacklogUI</a> project.<br />
-Made by and for the Stack Overflow <a href='http://chat.stackoverflow.com/rooms/11/php' target='_blank'>PHP chatroom</a>.</small></div>
+Made by and for the Stack Overflow <a href='http://chat.stackoverflow.com/rooms/11/php' target='_blank'>PHP chatroom</a>.</small>
 <script src='/assets/jscc/main.jscc'></script>
 </body>
 </html>

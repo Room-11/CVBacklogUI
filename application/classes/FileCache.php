@@ -3,7 +3,10 @@
 /**
  * Simple file-based cache
  *
- * @author       Marco Pivetta <ocramius@gmail.com>
+ * @author  Marco Pivetta <ocramius@gmail.com>
+ * @method  void __construct(string $path, int $ttl)
+ * @todo    -
+ * @uses    -
  */
 class FileCache
 {
