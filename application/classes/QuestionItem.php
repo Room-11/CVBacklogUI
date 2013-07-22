@@ -1,7 +1,7 @@
 <?php
 
 /**
- * -
+ * Determines additional information on a question
  *
  * @author  Kyra D. <kyra@existing.me>
  * @method  void __construct(stdClass $questionData)
@@ -160,5 +160,4 @@ class QuestionItem
             && 0 === $this->questionData->reopen_vote_count
             && 1 < $this->questionData->down_vote_count);
     }
-
 }

@@ -1,33 +1,38 @@
 <?php
 
 /**
- * -
+ * Fetches and serves backlog data
  *
  * @author  Kyra D. <kyra@existing.me>
- * @method   void __construct(string $dataSource)
- * @todo     -
- * @uses     -
+ * @method  void __construct(string $dataSource)
+ * @todo    -
+ * @uses    -
  */
 class Backlog
 {
     public  $questionIds = [];
     public  $questionsData = [];
-    public  $tbodyHtml;
+    public  $tbodyData;
+
     private $dataSource;
     private $questionIdsCache;
     private $questionDataCache;
     private $tbodyHtmlCache;
 
-    public function __construct($dataSource, $cacheDir, Array $expirationTimes)
+    public function __construct($dataSource, $cacheDir, array $expirationTimes)
     {
         $this->setDataSource($dataSource);
 
-        $dataSourceDir           = $cacheDir . '/' . $this->dataSource;
+        $dataSourceDir = $cacheDir . '/' . $this->dataSource;
+
         $this->questionIdsCache  = new FileCache($dataSourceDir . '_backlog_ids.cache.json', $expirationTimes['ids']);
         $this->questionDataCache = new FileCache($dataSourceDir . '_backlog_data.cache.json', $expirationTimes['data']);
         $this->tbodyHtmlCache    = new FileCache($dataSourceDir . '_tbody.cache.json', $expirationTimes['ids']);
     }
 
+    /**
+     * @return  bool
+     */
     public function fetchChatQuestionIds()
     {
         if (!$this->questionIdsCache->isExpired()) {
@@ -35,6 +40,7 @@ class Backlog
         }
 
         $jsonFile = 'http://cvbacklog.gordon-oheim.biz/';
+
         $questions = json_decode(file_get_contents($jsonFile, false,
             stream_context_create([
                 'http' => [
@@ -51,6 +57,9 @@ class Backlog
         $this->questionIdsCache->write($this->questionIds);
     }
 
+    /**
+     * @return  bool
+     */
     public function fetchApiQuestionIds($page = 1)
     {
         if (!$this->questionIdsCache->isExpired()) {
@@ -86,13 +95,14 @@ class Backlog
             }
         }
 
-        if ($apiData->has_more && $page !== 15) {
-            $this->fetchApiQuestionIds(++$page);
-        } else {
-            $this->questionIdsCache->write($this->questionIds);
-        }
+        ($apiData->has_more && $page !== 15)
+            ? $this->fetchApiQuestionIds(++$page)
+            : $this->questionIdsCache->write($this->questionIds);
     }
 
+    /**
+     * @return  bool
+     */
     public function updateCacheWithQuestionData()
     {
         if (!$this->questionDataCache->isExpired()) {
@@ -100,6 +110,7 @@ class Backlog
         }
 
         $this->getQuestionIds();
+
         foreach (array_chunk($this->questionIds, 100) as $questionsBatch) {
 
             $apiQuery = implode(';', $questionsBatch) . '?' . http_build_query([
@@ -140,16 +151,19 @@ class Backlog
             },
             $this->questionDataCache->read()
         );
+
         $this->tbodyHtmlCache->write([
             'timestamp' => time(),
-            'count'   => count($this->questionsData),
-            'content' => $this->renderView('tbody.php', ['questionsData' => $this->questionsData], true),
+            'count'     => count($this->questionsData),
+            'content'   => $this->renderView('tbody.php', ['questionsData' => $this->questionsData], true),
         ]);
     }
 
     public function getTbodyData()
     {
-        $this->tbodyData = $this->tbodyHtmlCache->read();
+        $this->tbodyData = ($this->tbodyHtmlCache->isFresh())
+            ? $this->tbodyHtmlCache->read()
+            : '';
     }
 
     public function setDataSource($dataSource) {
@@ -159,9 +173,10 @@ class Backlog
     /**
      * @return bool|string
      */
-    public function renderView($view, Array $viewVars = [], $returnOutput = false)
+    public function renderView($view, array $viewVars = [], $returnOutput = false)
     {
         $viewPath = '../application/views/' . $view;
+
         if (file_exists($viewPath)) {
             foreach ($viewVars as $varName => $varValue) {
                 $$varName = $varValue;
@@ -184,14 +199,25 @@ class Backlog
     public function debugDump($varDump = false)
     {
         if ($varDump) {
-            var_dump($this,
-                $this->questionIdsCache->read(),
-                $this->questionDataCache->read());
+            var_dump($this);
+
+            if ($this->questionIdsCache->isFresh()) {
+                var_dump($this->questionIdsCache->read());
+            }
+
+            if ($this->questionDataCache->isFresh()) {
+                var_dump($this->questionDataCache->read());
+            }
         } else {
             print_r($this);
-            print_r($this->questionIdsCache->read());
-            print_r($this->questionDataCache->read());
+
+            if ($this->questionIdsCache->isFresh()) {
+                print_r($this->questionIdsCache->read());
+            }
+
+            if ($this->questionDataCache->isFresh()) {
+                print_r($this->questionDataCache->read());
+            }
         }
     }
-
 }

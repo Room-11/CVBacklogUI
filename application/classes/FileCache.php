@@ -10,69 +10,52 @@
  */
 class FileCache
 {
-    private $path;
-    private $ttl;
-    private $dir;
+    private $cacheFilePath;
+    private $cacheFileExpiration;
 
     /**
-     * Constructor.
-     *
-     * @param string $path name of the file containing the cached information
-     * @param int    $ttl time to live (seconds)
-     *
-     * @throws InvalidArgumentException
+     * @throws  InvalidArgumentException
      */
-    public function __construct($path, $ttl)
+    public function __construct($cacheFilePath, $cacheFileExpiration)
     {
-        $this->path = (string) $path;
-        $this->ttl  = (int) $ttl;
+        $this->cacheFilePath = (string) $cacheFilePath;
+        $this->cacheFileExpiration  = (int) $cacheFileExpiration;
     }
 
     /**
-     * Retrieves whether the cache is fresh
-     *
-     * @return bool
+     * @return  bool
      */
     public function isFresh()
     {
-        return file_exists($this->path) && ($this->ttl > (time() - filemtime($this->path)));
+        return (file_exists($this->cacheFilePath)
+            && ($this->cacheFileExpiration > (time() - filemtime($this->cacheFilePath))));
     }
 
     /**
-     * Retrieves whether the cache is expired
-     *
-     * @return bool
+     * @return  bool
      */
     public function isExpired()
     {
-        return ! $this->isFresh();
+        return !$this->isFresh();
     }
 
-    /**
-     * Writes arbitrary json serializable data into the cache
-     *
-     * @param array $data
-     */
     public function write(array $data)
     {
-        $tmpPath = $this->path . uniqid('tmpPath', true);
+        $tmpCacheFilePath = $this->cacheFilePath . '.lock';
 
-        file_put_contents($tmpPath, json_encode($data));
-        chmod($tmpPath, 0604);
-        rename($tmpPath, $this->path);
+        file_put_contents($tmpCacheFilePath, json_encode($data));
+        rename($tmpCacheFilePath, $this->cacheFilePath);
+        chmod($tmpCacheFilePath, 0604);
     }
 
     /**
-     * Reads data from the cache (does not check validity, just blindly reads! Please use {@see isFresh} to check that)
+     * Reads data from the cache (does not check existence, use isFresh() for that)
      *
-     * @see isFresh
-     *
-     * @return mixed
+     * @see     isFresh
+     * @return  mixed
      */
     public function read()
     {
-        return (file_exists($this->path))
-            ? json_decode(file_get_contents($this->path))
-            : '';
+        return json_decode(file_get_contents($this->cacheFilePath));
     }
 }
