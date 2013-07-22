@@ -36,7 +36,7 @@ class FileCache
      */
     public function isExpired()
     {
-        return !$this->isFresh();
+        return ! $this->isFresh();
     }
 
     public function write(array $data)
