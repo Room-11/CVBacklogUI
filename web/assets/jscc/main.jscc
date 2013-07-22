@@ -194,7 +194,7 @@ var CvPlsBacklog = {};
 	{
 		var storedValue = this.settingsManager.getSetting(this.settingName);
 
-		if (storedValue === undefined) {
+		if (typeof storedValue !== "boolean") {
 			return this.element.hasAttribute('checked');
 		}
 
