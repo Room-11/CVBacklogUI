@@ -1,9 +1,0 @@
-# Auto-Generated, Do Not Edit
-
-User-agent: *
-Disallow: /assets/
-Disallow: /favicon.ico
-Disallow: /maintenance
-Disallow: /robots.txt
-
-Sitemap: http://cv-pls.com/sitemap.xml.gz

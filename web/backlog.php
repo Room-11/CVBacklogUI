@@ -1,5 +1,6 @@
 <?php
 
+chdir(__DIR__);
 
 require '../application/classes/FileCache.php';
 require '../application/classes/QuestionItem.php';
@@ -12,19 +13,17 @@ ob_start('ob_gzhandler');
 
 // just caching some vars
 $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-$chatRoomSource = (isset($_GET['chatroom']));
+$chatRoomSource = (isset($_GET['chatroom']) || (isset($argv[1]) && 'chatroom' === $argv[1]));
 
 
 // set data source options
-if ($chatRoomSource) {
-    $backlog = new Backlog('chat', './assets/cache', ['ids' => 900, 'data' => 120,]);
-} else {
-    $backlog = new Backlog('api', './assets/cache', ['ids' => 300, 'data' => 120,]);
-}
+$backlog = ($chatRoomSource)
+    ? new Backlog('chat', './assets/cache', ['ids' => 900, 'data' => 120,])
+    : new Backlog('api', './assets/cache', ['ids' => 300, 'data' => 120,]);
 
 
-// only have cron perform a cache update
-if ('cv-pls' === $userAgent) {
+// only have cron perform a cache update via CLI
+if ('cli' === php_sapi_name()) {
     if ($chatRoomSource) {
         $backlog->fetchChatQuestionIds();
     } else {
@@ -164,15 +163,16 @@ echo (empty($backlog->tbodyData->count)) ? 0 : $backlog->tbodyData->count;
 <tbody id='data-table-body'><?php
 
 echo (empty($backlog->tbodyData->content))
-    ? "<tr class='error-message'><td colspan='5'>Cache file(s) currently unavailable</td></tr>\n"
+    ? "<tr class='error-message'><td>Cache file(s) currently unavailable</td></tr>\n"
     : $backlog->tbodyData->content;
 
 ?>
-</tbody></table></div>
+</tbody></table>
 <div id='footer'>
 <small>API data provided by the <a href='https://stackexchange.com/' target='_blank'>Stack Exchange Network</a>.
 Official Github <a href='https://github.com/PHP-Chat/CVBacklogUI' target='_blank'>CVBacklogUI</a> project.<br />
 Made by and for the Stack Overflow <a href='http://chat.stackoverflow.com/rooms/11/php' target='_blank'>PHP chatroom</a>.</small>
+</div>
 <script src='/assets/jscc/main.jscc'></script>
 </body>
 </html>

@@ -45,7 +45,6 @@ class FileCache
 
         file_put_contents($tmpCacheFilePath, json_encode($data));
         rename($tmpCacheFilePath, $this->cacheFilePath);
-        chmod($tmpCacheFilePath, 0604);
     }
 
     /**

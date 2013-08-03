@@ -333,8 +333,7 @@ var CvPlsBacklog = {};
 	}
 }());
 
-(function() { // sticky elements
-
+(function() { // sticky header
 	'use strict';
 
 	var dataSources, tableHeader, origOffsetY;
@@ -353,5 +352,4 @@ var CvPlsBacklog = {};
 			tableHeader.classList.remove('sticky');
 		}
 	});
-
 }());

@@ -12,7 +12,7 @@ foreach ($questionsData as $question) {
     }
 
 ?></td>
-<td><a href='<?php echo $question->questionData->link; ?>'><?php
+<td><span><?php $question->questionData->score; ?></span> <a href='<?php echo $question->questionData->link; ?>'><?php
 
     // has to be a better way to truncate. CSS text-overflow??
     $shortTitle = html_entity_decode($question->questionData->title, ENT_QUOTES);
