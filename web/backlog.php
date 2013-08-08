@@ -131,13 +131,13 @@ echo ($chatRoomSource)
 </form>
 <table class='table table-bordered table-condensed' id='data-table-head'><thead><tr>
 <th colspan='2'><small>
-<strong>Displaying</strong> <span id='questions-count'>0</span> / <?php
+<strong>Viewing</strong> <span id='questions-count'>0</span> / <?php
 
 echo (isset($backlog->tbodyData->count))
     ? $backlog->tbodyData->count
     : 0;
 
-?><strong>Updated</strong> <span id='questions-timestamp'><?php
+?><strong>|</strong> <span id='questions-timestamp'><?php
 
 if (isset($backlog->tbodyData->timestamp)) {
     $updated = new DateTime();
