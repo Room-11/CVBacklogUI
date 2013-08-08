@@ -10,7 +10,7 @@ var CvPlsBacklog = {};
 	function linkClick(ev)
 	{
 		ev.preventDefault();
-		window.open(ev.target.href, this.linkTarget);
+		window.open(ev.currentTarget.href, this.linkTarget);
 	}
 
 	function refreshTable()

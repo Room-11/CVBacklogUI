@@ -180,6 +180,7 @@ h1
 {
 	border-radius : 0 0 4px 4px;
 	border-top : 0;
+	table-layout:fixed;
 
 	tbody
 	{
@@ -201,12 +202,27 @@ h1
 				{
 					text-align : left;
 					padding : 0;
+					white-space : nowrap;
 
 					a
 					{
 						display : block;
-						padding : 5px;
 						text-decoration : none;
+						padding : 5px;
+
+						span
+						{
+							overflow : hidden;
+							display : inline-block;
+
+							/* hack to prevent LessPHP from mangling calc() */
+							max-width : ~"-moz-calc(100% - 107px)";
+							max-width : ~"-webkit-calc(100% - 107px)";
+							max-width : ~"calc(100% - 107px)";
+
+							text-overflow : ellipsis;
+							vertical-align : middle;
+						}
 
 						i {margin-left : 5px;}
 					}

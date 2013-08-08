@@ -14,11 +14,7 @@ if (is_array($questionsData)) {
 <td title='Score: <?= $question->questionData->score ?> ( +<?= $question->questionData->up_vote_count ?> / -<?= $question->questionData->down_vote_count ?> )'>
 <a href='<?= $question->questionData->link ?>'><?php
 
-        // needed for now, CSS text-overflow not working, but why??
-        $shortTitle = html_entity_decode($question->questionData->title, ENT_QUOTES);
-        echo (90 < strlen($shortTitle))
-            ? htmlentities(substr($shortTitle, 0, 90), ENT_QUOTES) . '...'
-            : $question->questionData->title;
+        echo '<span>' . $question->questionData->title . '</span>';
 
         if (isset($question->questionData->locked_date)) {
             echo "<i class='icon-locked' title='Locked'></i>\n";
