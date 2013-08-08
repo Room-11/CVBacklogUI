@@ -1,6 +1,9 @@
 <?php
 
+
+// so paths work nice with CLI
 chdir(__DIR__);
+
 
 require '../application/classes/FileCache.php';
 require '../application/classes/QuestionItem.php';
@@ -11,8 +14,7 @@ require '../application/classes//Backlog.php';
 ob_start('ob_gzhandler');
 
 
-// just caching some vars
-$userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+// are we requesting chatroom data source
 $chatRoomSource = (isset($_GET['chatroom']) || (isset($argv[1]) && 'chatroom' === $argv[1]));
 
 
@@ -22,7 +24,7 @@ $backlog = ($chatRoomSource)
     : new Backlog('api', './assets/cache', ['ids' => 300, 'data' => 120,]);
 
 
-// only have cron perform a cache update via CLI
+// only allow CLI to perform cache update
 if ('cli' === php_sapi_name()) {
     if ($chatRoomSource) {
         $backlog->fetchChatQuestionIds();
@@ -46,12 +48,6 @@ if (isset($_GET['debug'])) {
     exit;
 }
 
-
-if (false !== strpos($userAgent, 'MSIE')) {
-    header('MSThemeCompatible: no');           // disable theming
-    header('X-Content-Type-Options: nosniff'); // prevent MIME sniffing
-    header('X-XSS-Protection: 1; mode=block'); // prevent XSS attacks
-}
 
 // Content Security Policy (http://www.w3.org/TR/CSP/)
 $cspPolicy = "default-src 'self'; "
@@ -80,33 +76,22 @@ header('X-Robots-Tag: noarchive, noodp, nofollow, noindex');
 <meta content='A fancy smancy cv-pls backlog interface' name='description' />
 <meta content='noimageindex, noodp, noarchive, nofollow, noindex' name='robots' />
 <meta content='width=device-width' name='viewport' />
-<!--[if IE]>
-<meta content='#ffffff' name='msapplication-TileColor' />
-<meta content='/assets/img/windows-metro-icon.png' name='msapplication-TileImage' />
-<meta content='cv-pls' name='application-name' />
-<link href='/assets/img/favicon.ico' rel='shortcut icon' />
-<![endif]-->
 <link href='https://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css' />
 <link href='/assets/less/main.less' rel='stylesheet' />
 <link href='/assets/img/favicon.png' rel='icon' type='image/png' />
 <link href='/assets/img/apple-touch-icon.png' rel='apple-touch-icon-precomposed image_src' />
-<!--[if lt IE 9]>
-<script src='//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js'></script>
-<![endif]-->
 </head>
 <?php flush(); ?>
 <body>
 <div id='data-sources'>
 <strong>Backlog Source</strong>
-<small>
-<?php
+<small><?php
 
 echo ($chatRoomSource)
     ? "<a href='/backlog' title='Pull from the Stack Exchange API'>API</a> <small>/</small> Chatroom"
     : "API <small>/</small> <a href='?chatroom' title='Pull from the PHP chatroom transcript'>Chatroom</a>";
 
-?>
-</small>
+?></small>
 </div>
 <h1>[cv-pls] Backlog <small>beta</small></h1>
 <form class='form-inline' id='options-form'>
@@ -120,7 +105,7 @@ echo ($chatRoomSource)
 <label class='checkbox adelv'><input id='check-adelv' type='checkbox' />auto-deleting</label><br />
 <label class='checkbox'><input checked='checked' id='check-tabs' type='checkbox' />open in tabs</label>
 <span class='disabled'>refresh every
-<select disabled='disabled' id='refresh-interval'>
+<select class='disabled' id='refresh-interval'>
 <option value='0' selected='selected'>0</option>
 <option value='2'>2</option>
 <option value='4'>4</option>
@@ -144,16 +129,29 @@ echo ($chatRoomSource)
 <span class='icon-accepted' title='Question has an accepted answer'>accepted</span>
 </fieldset>
 </form>
-<table class='table table-bordered table-condensed' id='data-table-head'>
-<thead><tr>
-<th class='stats' colspan='2'><small><strong>Displaying</strong> <span id='questions-count'>100</span> / <?php
+<table class='table table-bordered table-condensed' id='data-table-head'><thead><tr>
+<th colspan='2'><small>
+<strong>Displaying</strong> <span id='questions-count'>0</span> / <?php
 
-echo (empty($backlog->tbodyData->count)) ? 0 : $backlog->tbodyData->count;
+echo (isset($backlog->tbodyData->count))
+    ? $backlog->tbodyData->count
+    : 0;
 
-?></small></th>
-<th class='votes' colspan='3'>Votes</th>
+?><strong>Updated</strong> <span id='questions-timestamp'><?php
+
+if (isset($backlog->tbodyData->timestamp)) {
+    $updated = new DateTime();
+    $updated->setTimestamp($backlog->tbodyData->timestamp);
+    echo $updated->format(DateTime::W3C);
+} else {
+    echo '-';
+}
+
+?></span>
+</small></th>
+<th colspan='3'>Votes</th>
 </tr><tr>
-<th class='corner'><a href='https://github.com/cv-pls/site/blob/cv-pls.com/cv-pls_chat_docs.md#close-vote-acronyms' target='_blank'>Reason</a></th>
+<th><a href='https://github.com/cv-pls/site/blob/cv-pls.com/cv-pls_chat_docs.md#close-vote-acronyms' target='_blank'>Reason</a></th>
 <th>Title</th>
 <th>Close</th>
 <th>Delete</th>
@@ -162,15 +160,15 @@ echo (empty($backlog->tbodyData->count)) ? 0 : $backlog->tbodyData->count;
 <table class='scroll table table-bordered table-condensed table-hover' id='data-table'>
 <tbody id='data-table-body'><?php
 
-echo (empty($backlog->tbodyData->content))
-    ? "<tr class='error-message'><td>Cache file(s) currently unavailable</td></tr>\n"
-    : $backlog->tbodyData->content;
+echo (isset($backlog->tbodyData->content))
+    ? $backlog->tbodyData->content
+    : "<tr class='error-message'><td>Cache file(s) currently unavailable</td></tr>\n";
 
 ?>
 </tbody></table>
 <div id='footer'>
 <small>API data provided by the <a href='https://stackexchange.com/' target='_blank'>Stack Exchange Network</a>.
-Official Github <a href='https://github.com/PHP-Chat/CVBacklogUI' target='_blank'>CVBacklogUI</a> project.<br />
+Contribute to the <a href='https://github.com/PHP-Chat/CVBacklogUI' target='_blank'>CVBacklogUI</a> Github project.<br />
 Made by and for the Stack Overflow <a href='http://chat.stackoverflow.com/rooms/11/php' target='_blank'>PHP chatroom</a>.</small>
 </div>
 <script src='/assets/jscc/main.jscc'></script>

@@ -58,6 +58,7 @@
 	content: '\e003';
 }
 
+/* this is for column sorting later on */
 //.icon-up:before {content: '\e004';}
 //.icon-down:before {content: '\e005';}
 
@@ -132,37 +133,45 @@ h1
 
 	thead
 	{
-		th
+		tr
 		{
-			background-color : #f8f8ff;
-			text-align : center;
-
-			&.corner
+			&:nth-child(1)
 			{
-				border-radius : 4px 0 0 0;
-				width : 55px;
+				th:nth-child(1)
+				{
+					background-color : transparent;
+					border : 0;
+					font-weight : normal;
+					padding-right : 10px;
+					text-align : right;
+
+					strong {margin : 0 5px 0 15px;}
+				}
+
+				th:nth-child(2)
+				{
+					border-radius : 4px 4px 0 0;
+					border-top : 1px solid #e5e5e5;
+					width : 157px;
+				}
 			}
 
-			&.stats
+			&:nth-child(2)
 			{
-				background-color : transparent;
-				border : 0;
-				font-weight : normal;
-				padding-right : 10px;
-				text-align : right;
+				th:nth-child(1)
+				{
+					border-radius : 4px 0 0 0;
+					width : 55px;
+				}
 
-				strong {margin : 0 5px 0 15px;}
+				th:nth-child(3), th:nth-child(4), th:nth-child(5) {width : 45px;}
 			}
 
-			&.votes
+			th
 			{
-				border-radius : 4px 4px 0 0;
-				border-top : 1px solid #e5e5e5;
-				width : 157px;
+				background-color : #f8f8ff;
+				text-align : center;
 			}
-
-			&:nth-child(1) {width : 55px;}
-			&:nth-child(3), &:nth-child(4), &:nth-child(5) {width : 45px;}
 		}
 	}
 }
@@ -191,8 +200,16 @@ h1
 				&:nth-child(2)
 				{
 					text-align : left;
+					padding : 0;
 
-					a {margin-right : 5px;}
+					a
+					{
+						display : block;
+						padding : 5px;
+						text-decoration : none;
+
+						i {margin-left : 5px;}
+					}
 				}
 
 				&:nth-child(1) {width : 55px;}

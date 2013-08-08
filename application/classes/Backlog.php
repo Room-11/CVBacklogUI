@@ -25,9 +25,9 @@ class Backlog
 
         $dataSourceDir = $cacheDir . '/' . $this->dataSource;
 
-        $this->questionIdsCache  = new FileCache($dataSourceDir . '_backlog_ids.cache.json', $expirationTimes['ids']);
-        $this->questionDataCache = new FileCache($dataSourceDir . '_backlog_data.cache.json', $expirationTimes['data']);
-        $this->tbodyHtmlCache    = new FileCache($dataSourceDir . '_tbody.cache.json', $expirationTimes['ids']);
+        $this->questionIdsCache  = new FileCache($dataSourceDir . '_backlog_ids.json', $expirationTimes['ids']);
+        $this->questionDataCache = new FileCache($dataSourceDir . '_backlog_data.json', $expirationTimes['data']);
+        $this->tbodyHtmlCache    = new FileCache($dataSourceDir . '_backlog_tbody.json', $expirationTimes['ids']);
     }
 
     /**
@@ -81,7 +81,7 @@ class Backlog
         $apiRequest = 'https://api.stackexchange.com/2.1/search/advanced?' . $apiQuery;
 
         sleep(1); // throttle down
-        
+
         $apiData = json_decode(file_get_contents('compress.zlib://' . $apiRequest, false,
             stream_context_create([
                 'http' => [
@@ -128,7 +128,7 @@ class Backlog
             $apiRequest = 'https://api.stackexchange.com/2.1/questions/' . $apiQuery;
 
             sleep(1); // throttle down
-            
+
             $apiData = json_decode(file_get_contents('compress.zlib://' . $apiRequest, false,
                 stream_context_create([
                     'http' => [
@@ -138,7 +138,8 @@ class Backlog
                 ]
             )));
 
-            $this->questionDataCache->write($this->questionsData = array_merge($this->questionsData, $apiData->items));
+            $this->questionsData = array_merge($this->questionsData, $apiData->items);
+            $this->questionDataCache->write($this->questionsData);
         }
     }
 
@@ -159,7 +160,9 @@ class Backlog
         $this->tbodyHtmlCache->write([
             'timestamp' => time(),
             'count'     => count($this->questionsData),
-            'content'   => $this->renderView('tbody.php', ['questionsData' => $this->questionsData], true),
+            'content'   => $this->renderView('tbody.php', [
+                'questionsData' => $this->questionsData
+            ], true),
         ]);
     }
 

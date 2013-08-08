@@ -11,16 +11,14 @@ if (is_array($questionsData)) {
             : '>-';
 
 ?></td>
-<td title='Score: <?= $question->questionData->score ?> (+<?= $question->questionData->up_vote_count ?>/-<?= $question->questionData->down_vote_count ?>)'>
+<td title='Score: <?= $question->questionData->score ?> ( +<?= $question->questionData->up_vote_count ?> / -<?= $question->questionData->down_vote_count ?> )'>
 <a href='<?= $question->questionData->link ?>'><?php
 
-        // has to be a better way to truncate. CSS text-overflow??
+        // needed for now, CSS text-overflow not working, but why??
         $shortTitle = html_entity_decode($question->questionData->title, ENT_QUOTES);
         echo (90 < strlen($shortTitle))
             ? htmlentities(substr($shortTitle, 0, 90), ENT_QUOTES) . '...'
             : $question->questionData->title;
-
-?></a><?php
 
         if (isset($question->questionData->locked_date)) {
             echo "<i class='icon-locked' title='Locked'></i>\n";
@@ -38,7 +36,7 @@ if (is_array($questionsData)) {
             echo "<i class='icon-accepted' title='Has accepted answer'></i>\n";
         }
 
-?></td>
+?></a></td>
 <td><?= (0 == $question->questionData->close_vote_count) ? '-' : $question->questionData->close_vote_count ?></td>
 <td><?= (0 == $question->questionData->delete_vote_count) ? '-' : $question->questionData->delete_vote_count ?></td>
 <td><?= (0 == $question->questionData->reopen_vote_count) ? '-' : $question->questionData->reopen_vote_count ?></td>
