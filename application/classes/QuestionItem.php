@@ -16,8 +16,8 @@ class QuestionItem
     }
 
     /**
-     * @return   string
-     * @todo     Change to PHP 5.5 array dereference later on
+     * @return  string
+     * @todo    Change to PHP 5.5 array dereference later on
      */
     public function getCloseReasonName()
     {
@@ -32,7 +32,7 @@ class QuestionItem
     }
 
     /**
-     * @return   string
+     * @return  string
      */
     public function getCloseReasonAcronymn()
     {
@@ -61,7 +61,7 @@ class QuestionItem
     }
 
     /**
-     * @return   string
+     * @return  string
      */
     public function getQuestionType()
     {
@@ -80,7 +80,7 @@ class QuestionItem
     }
 
     /**
-     * @return   bool
+     * @return  bool
      */
     public function isDeleteQuestion()
     {
@@ -90,7 +90,7 @@ class QuestionItem
     }
 
     /**
-     * @return   bool
+     * @return  bool
      */
     public function isReopenQuestion()
     {
@@ -99,7 +99,8 @@ class QuestionItem
     }
 
     /**
-     * @return   bool
+     * @todo    should redo all this logic, some parts are wrong =o(
+     * @return  bool
      */
     public function isAutoDeleteQuestion()
     {
@@ -127,21 +128,12 @@ class QuestionItem
             && !isset($this->questionData->locked_date)
             && (isset($this->questionData->closed_date) && 777600 < (time() - $this->questionData->closed_date))
             && (isset($this->questionData->last_edit_date) && 777600 > (time() - $this->questionData->last_edit_date))) {
-
-            if (isset($this->questionData->answers)) {
-                foreach ($this->questionData->answers as $answer) {
-                    if (0 > $answer->score) {
-                        return false;
-                    }
-                }
-                return true;
-            }
         }
         return false;
     }
 
     /**
-     * @return   bool
+     * @return  bool
      */
     public function isCloseQuestion()
     {
@@ -150,7 +142,7 @@ class QuestionItem
     }
 
     /**
-     * @return   bool
+     * @return  bool
      */
     public function isReviewQuestion()
     {

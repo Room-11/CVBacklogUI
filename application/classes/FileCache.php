@@ -41,10 +41,7 @@ class FileCache
 
     public function write(array $data)
     {
-        $tmpCacheFilePath = $this->cacheFilePath . '.lock';
-
-        file_put_contents($tmpCacheFilePath, json_encode($data));
-        rename($tmpCacheFilePath, $this->cacheFilePath);
+        file_put_contents($this->cacheFilePath, json_encode($data), LOCK_EX);
     }
 
     /**

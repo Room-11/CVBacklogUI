@@ -80,6 +80,8 @@ class Backlog
 
         $apiRequest = 'https://api.stackexchange.com/2.1/search/advanced?' . $apiQuery;
 
+        sleep(1); // throttle down
+        
         $apiData = json_decode(file_get_contents('compress.zlib://' . $apiRequest, false,
             stream_context_create([
                 'http' => [
@@ -95,7 +97,7 @@ class Backlog
             }
         }
 
-        ($apiData->has_more && $page !== 15)
+        ($apiData->has_more && $page !== 10)
             ? $this->fetchApiQuestionIds(++$page)
             : $this->questionIdsCache->write($this->questionIds);
     }
@@ -114,7 +116,7 @@ class Backlog
         foreach (array_chunk($this->questionIds, 100) as $questionsBatch) {
 
             $apiQuery = implode(';', $questionsBatch) . '?' . http_build_query([
-                    'filter'   => '!.QoEavc1uFd(zfKW0kN88b0XK9TMQGQ-4Ov.2K17_D',
+                    'filter'   => '!.QoEavc1uFd(zfKW0kN88b0XK9TMQGPuKhq3j2tZxi',
                     'key'      => 'pMxerkFG8E257Xblt5BUHA((',
                     'order'    => 'desc',
                     'pagesize' => 100,
@@ -125,6 +127,8 @@ class Backlog
 
             $apiRequest = 'https://api.stackexchange.com/2.1/questions/' . $apiQuery;
 
+            sleep(1); // throttle down
+            
             $apiData = json_decode(file_get_contents('compress.zlib://' . $apiRequest, false,
                 stream_context_create([
                     'http' => [
