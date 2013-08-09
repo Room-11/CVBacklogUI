@@ -116,7 +116,7 @@ class Backlog
         foreach (array_chunk($this->questionIds, 100) as $questionsBatch) {
 
             $apiQuery = implode(';', $questionsBatch) . '?' . http_build_query([
-                    'filter'   => '!.QoEavc1uFd(zfKW0kN88b0XK9TMQGPuKhq3j2tZxi',
+                    'filter'   => '!.QoEavc1uFd6KiBaFu2FTZVXT8N8SpiOIBSWVTmNvq',
                     'key'      => 'pMxerkFG8E257Xblt5BUHA((',
                     'order'    => 'desc',
                     'pagesize' => 100,

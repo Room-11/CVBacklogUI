@@ -3,6 +3,11 @@
 if (is_array($questionsData)) {
     foreach ($questionsData as $question) {
 
+    // bug: https://github.com/PHP-Chat/CVBacklogUI/issues/9
+    if (isset($question->questionData->migrated_to) || isset($question->questionData->migrated_from)) {
+        continue;
+    }
+
 ?><tr class='<?= $question->getQuestionType() ?>'>
 <td<?php
 

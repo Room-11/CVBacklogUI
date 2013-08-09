@@ -21,7 +21,7 @@
 		url("@{font-dir}/icomoon.svg#icomoon") format('svg');
 }
 
-[class*='icon-']:before
+[class*='icon-']::before
 {
 	-webkit-font-smoothing : antialiased;
 	font-family : 'icomoon';
@@ -34,33 +34,33 @@
 	text-transform : none;
 }
 
-.icon-locked:before
+.icon-locked::before
 {
 	color : #778899;
 	content: '\e000';
 }
 
-.icon-protected:before
+.icon-protected::before
 {
 	color : #4979b9;
 	content: '\e001';
 }
 
-.icon-wikied:before
+.icon-wikied::before
 {
 	color : #2F4F4F;
 	content: '\e002';
 }
 
-.icon-accepted:before
+.icon-accepted::before
 {
 	color : #46b525;
 	content: '\e003';
 }
 
 /* this is for column sorting later on */
-//.icon-up:before {content: '\e004';}
-//.icon-down:before {content: '\e005';}
+//.icon-up::before {content: '\e004';}
+//.icon-down::before {content: '\e005';}
 
 
 /* global styles */
@@ -112,6 +112,7 @@ h1
 	{
 		border-bottom : 1px solid #e5e5e5;
 		padding-bottom : 5px;
+		white-space : nowrap;
 	}
 
 	small {margin : 0 5px;}
@@ -182,7 +183,7 @@ h1
 {
 	border-radius : 0 0 4px 4px;
 	border-top : 0;
-	table-layout:fixed;
+	table-layout : fixed;
 
 	tbody
 	{
@@ -232,7 +233,7 @@ h1
 
 				&:nth-child(1) {width : 55px;}
 				&:nth-child(3), &:nth-child(4), &:nth-child(5) {width : 45px;}
-				a:visited {color : @linkColorVisited;}
+				a::visited {color : @linkColorVisited;}
 			}
 
 			&.adelv > td {background-color: @autodeleteBackground;}
@@ -289,8 +290,6 @@ h1
 
 #legend
 {
-	margin : 0;
-
 	span
 	{
 		line-height : 30px;
