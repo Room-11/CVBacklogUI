@@ -139,13 +139,13 @@ echo (isset($backlog->tbodyData->count))
 
 ?><strong>|</strong> <span id='questions-timestamp'><?php
 
-if (isset($backlog->tbodyData->timestamp)) {
-    $updated = new DateTime();
-    $updated->setTimestamp($backlog->tbodyData->timestamp);
-    echo $updated->format(DateTime::W3C);
-} else {
-    echo '-';
-}
+$timestamp = (isset($backlog->tbodyData->timestamp))
+    ? $backlog->tbodyData->timestamp
+    : time();
+
+$updated = new DateTime();
+$updated->setTimestamp($timestamp);
+echo $updated->format(DateTime::W3C);
 
 ?></span>
 </small></th>
@@ -160,9 +160,9 @@ if (isset($backlog->tbodyData->timestamp)) {
 <table class='scroll table table-bordered table-condensed table-hover' id='data-table'>
 <tbody id='data-table-body'><?php
 
-echo (isset($backlog->tbodyData->content))
-    ? $backlog->tbodyData->content
-    : "<tr class='error-message'><td>Cache file(s) currently unavailable</td></tr>\n";
+echo (empty($backlog->tbodyData->content))
+    ? "<tr class='error-message'><td>Cache file(s) currently unavailable</td></tr>\n"
+    : $backlog->tbodyData->content;
 
 ?>
 </tbody></table>
