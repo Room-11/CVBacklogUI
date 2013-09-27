@@ -336,19 +336,15 @@ var CvPlsBacklog = {};
 (function() { // sticky header
 	'use strict';
 
-	var dataSources, tableHeader, origOffsetY;
+	var tableHeader, origOffsetY;
 
-	dataSources = document.getElementById('data-sources');
 	tableHeader = document.getElementById('data-table-head');
 	origOffsetY = tableHeader.offsetTop;
 
 	window.addEventListener('scroll', function () {
 		if (window.scrollY >= origOffsetY) {
-			dataSources.classList.add('sticky');
-			dataSources.style.top = window.scrollY + 'px';
 			tableHeader.classList.add('sticky');
 		} else {
-			dataSources.classList.remove('sticky');
 			tableHeader.classList.remove('sticky');
 		}
 	});

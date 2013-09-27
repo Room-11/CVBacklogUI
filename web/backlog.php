@@ -93,7 +93,7 @@ echo ($chatRoomSource)
 
 ?></small>
 </div>
-<h1>[cv-pls] Backlog <small>beta</small></h1>
+<h1 id='page-top'><a href='/backlog'><img alt='[cv-ring] logo' src='/assets/img/favicon.png'>[cv-pls] Backlog <small>1.1-beta</small></a></h1>
 <form class='form-inline' id='options-form'>
 <fieldset>
 <legend>Options</legend>
@@ -104,8 +104,8 @@ echo ($chatRoomSource)
 <label class='checkbox rv'><input id='check-rv' type='checkbox' />review</label>
 <label class='checkbox adelv'><input id='check-adelv' type='checkbox' />auto-deleting</label><br />
 <label class='checkbox'><input checked='checked' id='check-tabs' type='checkbox' />open in tabs</label>
-<span class='disabled'>refresh every
-<select class='disabled' id='refresh-interval'>
+<!--<span>refresh every
+<select id='refresh-interval'>
 <option value='0' selected='selected'>0</option>
 <option value='2'>2</option>
 <option value='4'>4</option>
@@ -116,7 +116,7 @@ echo ($chatRoomSource)
 <option value='14'>14</option>
 <option value='16'>16</option>
 </select> mins
-</span>
+</span>-->
 <button class='btn btn-link btn-small' id='reset-options' type='button'>[ reset options ]</button>
 </fieldset>
 </form>
@@ -129,8 +129,10 @@ echo ($chatRoomSource)
 <span class='icon-accepted' title='Question has an accepted answer'>accepted</span>
 </fieldset>
 </form>
+<div id='sticky-container'>
 <table class='table table-bordered table-condensed' id='data-table-head'><thead><tr>
-<th colspan='2'><small>
+<th><a class='icon-arrow-up goto-top' href='#page-top'>Top</a></th>
+<th><small>
 <strong>Viewing</strong> <span id='questions-count'>0</span> / <?php
 
 echo (isset($backlog->tbodyData->count))
@@ -157,6 +159,7 @@ echo $updated->format(DateTime::W3C);
 <th>Delete</th>
 <th>Open</th>
 </tr></thead></table>
+</div>
 <table class='scroll table table-bordered table-condensed table-hover' id='data-table'>
 <tbody id='data-table-body'><?php
 

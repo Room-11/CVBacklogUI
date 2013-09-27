@@ -128,6 +128,7 @@ class QuestionItem
             && !isset($this->questionData->locked_date)
             && (isset($this->questionData->closed_date) && 777600 < (time() - $this->questionData->closed_date))
             && (isset($this->questionData->last_edit_date) && 777600 > (time() - $this->questionData->last_edit_date))) {
+            return true;
         }
         return false;
     }

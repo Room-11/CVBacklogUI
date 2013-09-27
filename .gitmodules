@@ -1,3 +1,0 @@
-[submodule "application/log"]
-	path = application/log
-	url = git@github.com:php-fig/log.git

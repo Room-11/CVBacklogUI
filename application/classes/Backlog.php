@@ -97,7 +97,7 @@ class Backlog
             }
         }
 
-        ($apiData->has_more && $page !== 10)
+        ($apiData->has_more && $page !== 8)
             ? $this->fetchApiQuestionIds(++$page)
             : $this->questionIdsCache->write($this->questionIds);
     }
