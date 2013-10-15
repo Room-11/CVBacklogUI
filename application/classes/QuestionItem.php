@@ -65,10 +65,10 @@ class QuestionItem
      */
     public function getQuestionType()
     {
-        if ($this->isAutoDeleteQuestion()) {
-            return 'adelv';
-        } else if ($this->isCloseQuestion()) {
+        if ($this->isCloseQuestion()) {
             return'cv';
+        } else if ($this->isAutoDeleteQuestion()) {
+            return 'adelv';
         } else if ($this->isDeleteQuestion()) {
             return 'delv';
         } else if ($this->isReviewQuestion()) {
