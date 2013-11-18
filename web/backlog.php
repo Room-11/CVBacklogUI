@@ -4,6 +4,8 @@
 // so paths work nice with CLI
 chdir(__DIR__);
 
+// need to set default timezone, blame Derick Rethans
+date_default_timezone_set(ini_get('date.timezone') ?: 'UTC');
 
 require '../application/classes/FileCache.php';
 require '../application/classes/QuestionItem.php';
