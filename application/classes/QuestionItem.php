@@ -69,7 +69,7 @@ class QuestionItem
             return'cv';
         } else if ($this->isAutoDeleteQuestion()) {
             return 'adelv';
-        } else if ($this->isDeleteQuestion()) {
+        } else  if ($this->isDeleteQuestion()) {
             return 'delv';
         } else if ($this->isReviewQuestion()) {
             return 'rv';
