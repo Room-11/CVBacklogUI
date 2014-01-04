@@ -4,6 +4,8 @@
 // so paths work nice with CLI
 chdir(__DIR__);
 
+// need to set default timezone, blame Derick Rethans
+date_default_timezone_set(ini_get('date.timezone') ?: 'UTC');
 
 require '../application/classes/FileCache.php';
 require '../application/classes/QuestionItem.php';
@@ -72,12 +74,12 @@ header('X-Robots-Tag: noarchive, noodp, nofollow, noindex');
 <html lang='en' xmlns='http://www.w3.org/1999/xhtml'>
 <head>
 <meta charset='utf-8' />
-<title>cv-pls Backlog (beta)</title>
+<title>cv-pls Backlog</title>
 <meta content='A fancy smancy cv-pls backlog interface' name='description' />
 <meta content='noimageindex, noodp, noarchive, nofollow, noindex' name='robots' />
 <meta content='width=device-width' name='viewport' />
 <link href='https://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css' />
-<link href='/assets/less/main.less' rel='stylesheet' />
+<link href='/assets/css/main.css' rel='stylesheet' />
 <link href='/assets/img/favicon.png' rel='icon' type='image/png' />
 <link href='/assets/img/apple-touch-icon.png' rel='apple-touch-icon-precomposed image_src' />
 </head>
@@ -93,7 +95,7 @@ echo ($chatRoomSource)
 
 ?></small>
 </div>
-<h1 id='page-top'><a href='/backlog'><img alt='[cv-ring] logo' src='/assets/img/favicon.png'>[cv-pls] Backlog <small>1.1-beta</small></a></h1>
+<h1 id='page-top'><a href='/backlog'><img alt='[cv-ring] logo' src='/assets/img/favicon.png'>[cv-pls] Backlog <small>v1.1</small></a></h1>
 <form class='form-inline' id='options-form'>
 <fieldset>
 <legend>Options</legend>
@@ -174,6 +176,6 @@ echo (empty($backlog->tbodyData->content))
 Contribute to the <a href='https://github.com/PHP-Chat/CVBacklogUI' target='_blank'>CVBacklogUI</a> Github project.<br />
 Made by and for the Stack Overflow <a href='http://chat.stackoverflow.com/rooms/11/php' target='_blank'>PHP chatroom</a>.</small>
 </div>
-<script src='/assets/jscc/main.jscc'></script>
+<script src='/assets/js/main.js'></script>
 </body>
 </html>

@@ -278,16 +278,16 @@ h1
 
 				&:nth-child(1) {width : 65px;}
 				&:nth-child(3), &:nth-child(4), &:nth-child(5) {width : 58px;}
-				a::visited {color : @linkColorVisited;}
+				a::visited {color : red;}
 			}
 
-			&.adelv > td {background-color: @state-autodelete-bg;}
+			&.adelv > td {background-color: #eee;}
 			&.cv > td {background-color: @state-warning-bg;}
 			&.delv > td {background-color: @state-danger-bg;}
 			&.ro > td {background-color: @state-success-bg;}
 			&.rv > td {background-color: @state-info-bg;}
 
-			&.adelv:hover > td {background-color: darken(@state-autodelete-bg, 5%);}
+			&.adelv:hover > td {background-color: darken(#eee, 5%);}
 			&.cv:hover > td {background-color: darken(@state-warning-bg, 5%);}
 			&.delv:hover > td {background-color: darken(@state-danger-bg, 5%);}
 			&.ro:hover > td {background-color: darken(@state-success-bg, 5%);}
@@ -313,7 +313,7 @@ h1
 		margin-right : 15px;
 		padding : 0 5px;
 
-		&.adelv {background-color : @state-autodelete-bg;}
+		&.adelv {background-color :#eee;}
 		&.cv {background-color : @state-warning-bg;}
 		&.delv {background-color : @state-danger-bg;}
 		&.ro {background-color : @state-success-bg;}
