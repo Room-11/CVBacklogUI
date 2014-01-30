@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2013 PHP Chat <http://chat.stackoverflow.com/rooms/11/php>
+Copyright (c) 2013-2014 Stack Overflow [Close-Vote Ring](https://github.com/Room-11/CVBacklogUI/contributors)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

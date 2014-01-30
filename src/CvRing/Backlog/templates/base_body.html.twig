@@ -1,0 +1,115 @@
+{% include 'header.html.twig' %}
+{% set cache_success = source_data is same as(false) ? 0 : 1 %}
+{% set timestamp = cache_success ? source_data.timestamp : 'now' %}
+
+{% if APP_ENV is same as ('dev') %}
+    <div id='beta-banner'>
+        See what's <a href='https://github.com/Room-11/CVBacklogUI/blob/2.0/CHANGELOG.md' target='_blank'>new</a>
+        in this beta release. Please report any issues by opening a
+        <a href='https://github.com/Room-11/CVBacklogUI/issues' target='_blank'>bug report</a>. Thank you!
+    </div>
+{% endif %}
+
+<div id='data-sources'>
+    <strong>Backlog Source</strong>
+    <small>
+        {% if 'api' == src %}
+            API <small>/</small>
+            <a href='/backlog/chat' title='Pull from the PHP chatroom transcript'>Chatroom</a>
+        {% else %}
+            <a href='/backlog/api' title='Pull from the Stack Exchange API'>API</a>
+            <small>/</small> Chatroom
+        {% endif %}
+    </small>
+</div>
+
+<h1>
+    <a href='/backlog'>
+        <img alt='[cv-ring] logo' src='{{ asset('assets/img/favicon.png') }}'>[cv-pls] Backlog
+        <small>v2.0.0-alpha</small>
+    </a>
+</h1>
+
+<form class='form-inline' id='options-form'>
+    <fieldset>
+        <legend>Options</legend>
+        <div>
+            <strong>Hide</strong> <label class='checkbox cv'><input id='check-cv' type='checkbox'>close</label>
+            <label class='checkbox delv'><input id='check-delv' type='checkbox'>delete</label>
+            <label class='checkbox ro'><input id='check-ro' type='checkbox'>re-open</label>
+            <label class='checkbox rv'><input id='check-rv' type='checkbox'>review</label>
+            <label class='checkbox adelv'><input id='check-adelv' type='checkbox'>auto-delete</label>
+        </div>
+        <label class='checkbox'><input checked='checked' id='check-tabs' type='checkbox'>open in tabs</label>
+        <label for='refresh-interval'>update every <select id='refresh-interval'>
+                {% set data_cache_ttl = config.getSourceCacheTtl('api', 'data') %}
+                {% for i in range(low = 0, high = (data_cache_ttl * 10), step = data_cache_ttl) %}
+                    <option value='{{ i }}'>{{ ( i / 60 )|round(0, 'ceil') }}</option>
+                {% endfor %}
+            </select> mins </label>
+        <button class='btn btn-default btn-xs' id='reset-options' type='button'>reset all</button>
+    </fieldset>
+</form>
+
+<div id='legend'>
+    <fieldset>
+        <legend>Legend</legend>
+        <div id='legend-icons'>
+            <span class='icon-accepted' title='Question has an accepted answer'>accepted</span>
+            <span class='icon-bounty' title='Question has bounty in place'>bountied</span>
+            <span class='icon-locked' title='Question is locked'>locked</span>
+            <span class='icon-protected' title='Question is protected'>protected</span>
+            <span class='icon-wikied' title='Question is community wikied'>wikied</span>
+        </div>
+    </fieldset>
+</div>
+
+<div id='header-sticky-container'>
+    <table class='table table-bordered table-condensed' id='data-table-head'>
+        <thead>
+        <tr>
+            <th colspan='2'>
+                <div class='pull-left' id='sticky-legend-icons'></div>
+                <small>
+                    <strong>Viewing</strong> <span id='questions-count-current'>0</span> /
+                    <span id='questions-count-total'>0</span>
+                    <strong>Updated</strong><span data-timestamp='{{ timestamp|date('U') }}' id='questions-timestamp'>
+                        {{ timestamp|date('h:i:s T') }}
+                    </span>
+                    <span class='hidden' id='refresh-notice'>0</span>
+                </small>
+            </th>
+            <th colspan='3'>Votes</th>
+        </tr>
+        <tr id='table-column-names'>
+            <th>Reason</th>
+            <th>Title</th>
+            <th data-treat-as='int'>Close</th>
+            <th data-treat-as='int'>Delete</th>
+            <th data-treat-as='int'>Open</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<table class='table table-bordered table-condensed table-hover' id='data-table'>
+<tbody id='data-table-body'>
+{% if cache_success %}
+    {% include 'tbody.html.twig' %}
+{% else %}
+    <tr class='error-message'>
+        <td>Cache file(s) currently unavailable</td>
+    </tr>
+{% endif %}
+</tbody>
+</table>
+
+<div id='footer'>
+    API data provided by the
+    <a href='https://stackexchange.com/' target='_blank'>Stack Exchange Network</a>. This site hosted by
+    <a href='https://www.site5.com/' target='_blank'>Site5</a>.<br>
+    <a href='https://github.com/Room-11/CVBacklogUI' target='_blank'>CVBacklogUI</a> is made by the Stack Overflow
+    <a href='http://chat.stackoverflow.com/rooms/11/php' target='_blank'>PHP chatroom</a>.
+</div>
+
+{% include 'footer.html.twig' %}
