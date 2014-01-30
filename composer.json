@@ -25,7 +25,6 @@
         }
     ],
     "require": {
-        "desarrolla2/cache": "~1.7",
         "monolog/monolog": "~1.7",
         "php": ">=5.4",
         "rdlowrey/artax": "~0.6.2",
