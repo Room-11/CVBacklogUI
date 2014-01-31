@@ -44,12 +44,11 @@ class ConfigFile
     public function getApiStackDomain()
     {
         $this->verifyOption('api.stack_domain');
-        $stackDomain = $this->config['api.stack_domain'];
+        $stackDomain = str_replace('meta.', '', $this->config['api.stack_domain']);
 
         static $validStackDomains = [
             'askubuntu.com',
             'mathoverflow.net',
-            'meta.stackoverflow.com',
             'serverfault.com',
             'stackapps.com',
             'stackoverflow.com',
