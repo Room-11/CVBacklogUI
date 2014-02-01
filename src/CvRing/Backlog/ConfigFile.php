@@ -38,6 +38,7 @@ class ConfigFile
     }
 
     /**
+     * {@internal https://api.stackexchange.com/docs/sites#pagesize=500&filter=!21u_BTgHIaNnJmchKupo&run=true }}
      * @return string
      * @throws \UnexpectedValueException
      */
