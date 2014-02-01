@@ -49,6 +49,7 @@ class ConfigFile
         static $validStackDomains = [
             'askubuntu.com',
             'mathoverflow.net',
+            'pt.stackoverflow.com',
             'serverfault.com',
             'stackapps.com',
             'stackoverflow.com',
