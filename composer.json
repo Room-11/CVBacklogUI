@@ -1,0 +1,45 @@
+{
+    "description": "Stack Overflow Close-Vote Backlog UI",
+    "homepage": "http://cv-pls.com/backlog",
+    "keywords": ["backlog", "close-vote", "cv-pls", "cv-ring", "stack overflow"],
+    "license": "MIT",
+    "name": "room-11/cvbacklogui",
+    "type": "project",
+    "version": "v2.0.0-alpha",
+    "authors": [
+        {
+            "email": "kyra@existing.me",
+            "homepage": "https://github.com/KyraD",
+            "name": "Kyra D.",
+            "role": "Lead Developer"
+        },
+        {
+            "email": "cvbacklogui@daverandom.com",
+            "homepage": "https://github.com/DaveRandom",
+            "name": "Chris Wright",
+            "role": "Developer"
+        },
+        {
+            "homepage": "https://github.com/Room-11/CVBacklogUI/contributors",
+            "name": "Stack Overflow Close-Vote Ring"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "~1.7",
+        "php": ">=5.4",
+        "rdlowrey/artax": "~0.6.2",
+        "rdlowrey/arya": "dev-master",
+        "twig/twig": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~3.7",
+        "satooshi/php-coveralls": "~0.6",
+        "squizlabs/php_codesniffer": "~1.5",
+        "twbs/bootstrap": "v3.0.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "CvRing\\Backlog\\": "src"
+        }
+    }
+}

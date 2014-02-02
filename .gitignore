@@ -1,0 +1,6 @@
+.idea
+cache/*
+composer.lock
+composer.phar
+logs/*
+vendor

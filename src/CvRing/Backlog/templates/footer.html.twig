@@ -1,0 +1,11 @@
+{% if APP_ENV is same as ('dev') %}
+    <script src='{{ asset('assets/js/dev/form_options.dev.js') }}'></script>
+    <script src='{{ asset('assets/js/dev/table_sorter.dev.js') }}'></script>
+    <script src='{{ asset('assets/js/dev/main.dev.js') }}'></script>
+{% else %}
+    <script src='{{ asset('assets/js/form_options.js') }}'></script>
+    <script src='{{ asset('assets/js/table_sorter.js') }}'></script>
+    <script src='{{ asset('assets/js/main.js') }}'></script>
+{% endif %}
+</body>
+</html>

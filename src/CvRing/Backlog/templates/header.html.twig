@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <title>cv-pls.com | {{ config.getSourceTitle(src)|escape('html') }}</title>
+    {% if page_desc is defined %}
+        <meta content='{{ page_desc|escape('html_attr') }}' name='description'>
+    {% endif %}
+    <meta content='noimageindex, noodp, noarchive, nofollow, noindex' name='robots'>
+    <meta content='width=device-width' name='viewport'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet'>
+    <link href='{{ asset('assets/css/main.css') }}' rel='stylesheet'>
+    <link href='{{ asset('assets/img/favicon.png') }}' rel='icon' type='image/png'>
+</head>
+<body>
