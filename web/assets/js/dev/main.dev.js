@@ -24,7 +24,7 @@
     'use strict';
 
     var timestamp = document.getElementById('questions-timestamp'),
-        date = new Date(Number(timestamp.getAttribute('data-timestamp')) * 1000),
+        date = new Date(Number(document.getElementById('data-table-body').getAttribute('data-timestamp')) * 1000),
         hours = date.getHours(),
         mins = date.getMinutes(),
         secs = date.getSeconds();

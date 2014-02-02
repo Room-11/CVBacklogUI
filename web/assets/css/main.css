@@ -1570,7 +1570,7 @@ h1 small {
   margin-left: 10px;
   padding-left: 15px;
 }
-#beta-banner {
+#dev-banner {
   background-color: #99CC99;
   border-radius: 0 0 50px 50px;
   color: #000;
@@ -1581,7 +1581,7 @@ h1 small {
   top: -10px;
   width: 675px;
 }
-#beta-banner a {
+#dev-banner a {
   font-weight: 700;
 }
 #data-sources {

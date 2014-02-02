@@ -38,18 +38,19 @@ class ConfigFile
     }
 
     /**
+     * {@internal https://api.stackexchange.com/docs/sites#pagesize=500&filter=!21u_BTgHIaNnJmchKupo&run=true }}
      * @return string
      * @throws \UnexpectedValueException
      */
     public function getApiStackDomain()
     {
         $this->verifyOption('api.stack_domain');
-        $stackDomain = $this->config['api.stack_domain'];
+        $stackDomain = str_replace('meta.', '', $this->config['api.stack_domain']);
 
         static $validStackDomains = [
             'askubuntu.com',
             'mathoverflow.net',
-            'meta.stackoverflow.com',
+            'pt.stackoverflow.com',
             'serverfault.com',
             'stackapps.com',
             'stackoverflow.com',
@@ -122,7 +123,7 @@ class ConfigFile
     }
 
     /**
-     * @param $filterName
+     * @param string $filterName
      * @return string
      */
     public function getFilter($filterName)
@@ -132,8 +133,8 @@ class ConfigFile
     }
 
     /**
-     * @param $source
-     * @param $type
+     * @param string $source
+     * @param string $type
      * @return int
      * @throws \UnexpectedValueException
      */
@@ -151,7 +152,7 @@ class ConfigFile
     }
 
     /**
-     * @param $source
+     * @param string $source
      * @return int
      * @throws \UnexpectedValueException
      */
@@ -169,7 +170,7 @@ class ConfigFile
     }
 
     /**
-     * @param $source
+     * @param string $source
      * @return string
      */
     public function getSourceTitle($source)
@@ -180,7 +181,7 @@ class ConfigFile
     }
 
     /**
-     * @param $configOption
+     * @param string $configOption
      * @throws \UnexpectedValueException
      */
     private function verifyOption($configOption)
@@ -191,21 +192,21 @@ class ConfigFile
     }
 
     /**
-     * @param $configFile
+     * @param string $filePath
      * @return string
      * @throws \RuntimeException
      */
-    private function loadConfigFile($configFile)
+    private function loadConfigFile($filePath)
     {
-        if (!file_exists($configFile)) {
-            throw new \RuntimeException("config file '$configFile' does not exist");
+        if (!file_exists($filePath)) {
+            throw new \RuntimeException("config file '$filePath' does not exist");
         }
 
-        if (!is_readable($configFile)) {
-            throw new \RuntimeException("config file '$configFile' is not readable");
+        if (!is_readable($filePath)) {
+            throw new \RuntimeException("config file '$filePath' is not readable");
         }
 
-        return file_get_contents($configFile);
+        return file_get_contents($filePath);
     }
 
     /**

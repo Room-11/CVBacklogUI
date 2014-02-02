@@ -3,9 +3,9 @@
 {% set timestamp = cache_success ? source_data.timestamp : 'now' %}
 
 {% if APP_ENV is same as ('dev') %}
-    <div id='beta-banner'>
+    <div id='dev-banner'>
         See what's <a href='https://github.com/Room-11/CVBacklogUI/blob/2.0/CHANGELOG.md' target='_blank'>new</a>
-        in this beta release. Please report any issues by opening a
+        in this release. Please report any issues by opening a
         <a href='https://github.com/Room-11/CVBacklogUI/issues' target='_blank'>bug report</a>. Thank you!
     </div>
 {% endif %}
@@ -73,7 +73,7 @@
                 <small>
                     <strong>Viewing</strong> <span id='questions-count-current'>0</span> /
                     <span id='questions-count-total'>0</span>
-                    <strong>Updated</strong><span data-timestamp='{{ timestamp|date('U') }}' id='questions-timestamp'>
+                    <strong>Updated</strong><span id='questions-timestamp'>
                         {{ timestamp|date('h:i:s T') }}
                     </span>
                     <span class='hidden' id='refresh-notice'>0</span>
@@ -93,15 +93,7 @@
 </div>
 
 <table class='table table-bordered table-condensed table-hover' id='data-table'>
-<tbody id='data-table-body'>
-{% if cache_success %}
     {% include 'tbody.html.twig' %}
-{% else %}
-    <tr class='error-message'>
-        <td>Cache file(s) currently unavailable</td>
-    </tr>
-{% endif %}
-</tbody>
 </table>
 
 <div id='footer'>
