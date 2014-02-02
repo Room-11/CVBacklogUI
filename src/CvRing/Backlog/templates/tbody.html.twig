@@ -1,24 +1,31 @@
-{% for question in questions %}
-    {% set close_reason_acronym = question.getCloseReasonAcronym() %}
-    {% set close_vote_count = question.getCloseVoteCount() %}
-    {% set delete_vote_count = question.getDeleteVoteCount() %}
-    {% set reopen_vote_count = question.getReopenVoteCount() %}
-    <tr class='{{ question.getQuestionType() }}'>
-        <td{% if close_reason_acronym is same as(false) %}>-{% else %} title='{{ question.getCloseReasonName() }}'>
-            {{ close_reason_acronym }}{% endif %}
-        </td>
-        <td title='Score: {{ question.getScore() }} ( +{{ question.getUpVoteCount() }} / -{{ question.getDownVoteCount() }} )'>
-            <a href='{{ question.getLink() }}'>
-                <span>{{ question.getUnsafeTitle()|escape('html') }}</span>
-                {% if question.isAccepted() %}<i class='icon-accepted' title='Has accepted answer'></i>{% endif %}
-                {% if question.isBountied() %}<i class='icon-bounty' title='Has bounty in place'></i>{% endif %}
-                {% if question.isLocked() %}<i class='icon-locked' title='Locked'></i>{% endif %}
-                {% if question.isProtected() %}<i class='icon-protected' title='Protected'></i>{% endif %}
-                {% if question.isWikied() %}<i class='icon-wikied' title='Community wikied'></i>{% endif %}
-            </a>
-        </td>
-        <td>{{ close_vote_count is same as(0) ? '-' : close_vote_count }}</td>
-        <td>{{ delete_vote_count is same as(0) ? '-' : delete_vote_count }}</td>
-        <td>{{ reopen_vote_count is same as(0) ? '-' : reopen_vote_count }}</td>
+<tbody data-timestamp='{{ timestamp|date('U') }}' id='data-table-body'>
+{% if cache_success %}
+    {% for question in source_data.questions %}
+        {% set close_reason_acronym = question.getCloseReasonAcronym() %}
+        {% set close_vote_count = question.getCloseVoteCount() %}
+        {% set delete_vote_count = question.getDeleteVoteCount() %}
+        {% set reopen_vote_count = question.getReopenVoteCount() %}
+        <tr class='{{ question.getQuestionType() }}'>
+            <td{% if close_reason_acronym is same as(false) %}>-{% else %} title='{{ question.getCloseReasonName() }}'>
+                {{ close_reason_acronym }}{% endif %}
+            </td>
+            <td title='Score: {{ question.getScore() }} ( +{{ question.getUpVoteCount() }} / -{{ question.getDownVoteCount() }} )'>
+                <a href='{{ question.getLink() }}'><span>{{ question.getUnsafeTitle()|escape('html') }}</span>
+                    {% if question.isAccepted() %}<i class='icon-accepted' title='Has accepted answer'></i>{% endif %}
+                    {% if question.isBountied() %}<i class='icon-bounty' title='Has bounty in place'></i>{% endif %}
+                    {% if question.isLocked() %}<i class='icon-locked' title='Locked'></i>{% endif %}
+                    {% if question.isProtected() %}<i class='icon-protected' title='Protected'></i>{% endif %}
+                    {% if question.isWikied() %}<i class='icon-wikied' title='Community wikied'></i>{% endif %}
+                </a>
+            </td>
+            <td>{{ close_vote_count is same as(0) ? '-' : close_vote_count }}</td>
+            <td>{{ delete_vote_count is same as(0) ? '-' : delete_vote_count }}</td>
+            <td>{{ reopen_vote_count is same as(0) ? '-' : reopen_vote_count }}</td>
+        </tr>
+    {% endfor %}
+{% else %}
+    <tr class='error-message'>
+        <td>Cache file(s) currently unavailable</td>
     </tr>
-{% endfor %}
+{% endif %}
+</tbody>
