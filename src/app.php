@@ -31,6 +31,7 @@ $twig = new Twig_Environment(
 );
 
 $twig->addExtension(new Twig_Extension_Debug());
+$twig->addExtension(new Twig_Extension_Optimizer());
 
 $twig->addGlobal('APP_ENV', $appEnv);
 $twig->addGlobal('config', $config);
