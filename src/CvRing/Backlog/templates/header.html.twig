@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
     <meta charset='utf-8'>
-    <title>cv-pls.com | {{ config.getSourceTitle(src)|escape('html') }}</title>
+    <title>cv-pls.com | {{ config.getSourceTitle(source_data.src_name)|escape('html') }}</title>
     {% if page_desc is defined %}
         <meta content='{{ page_desc|escape('html_attr') }}' name='description'>
     {% endif %}

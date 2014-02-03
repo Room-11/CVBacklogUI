@@ -1,11 +1,6 @@
-{% if APP_ENV is same as ('dev') %}
-    <script src='{{ asset('assets/js/dev/form_options.dev.js') }}'></script>
-    <script src='{{ asset('assets/js/dev/table_sorter.dev.js') }}'></script>
-    <script src='{{ asset('assets/js/dev/main.dev.js') }}'></script>
-{% else %}
-    <script src='{{ asset('assets/js/form_options.js') }}'></script>
-    <script src='{{ asset('assets/js/table_sorter.js') }}'></script>
-    <script src='{{ asset('assets/js/main.js') }}'></script>
-{% endif %}
+{% set dev_dir = APP_ENV is same as ('dev') ? '/dev' : '' %}
+<script src='{{ asset('assets/js' ~ dev_dir ~ '/form_options.js') }}'></script>
+<script src='{{ asset('assets/js' ~ dev_dir ~ '/table_sorter.js') }}'></script>
+<script src='{{ asset('assets/js' ~ dev_dir ~ '/main.js') }}'></script>
 </body>
 </html>

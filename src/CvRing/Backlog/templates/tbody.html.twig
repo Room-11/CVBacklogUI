@@ -1,5 +1,5 @@
-<tbody data-timestamp='{{ timestamp|date('U') }}' id='data-table-body'>
-{% if cache_success %}
+<tbody data-timestamp='{{ source_data.timestamp|date('U') }}' id='data-table-body'>
+{% if source_data.questions is not same as(false) %}
     {% for question in source_data.questions %}
         {% set close_reason_acronym = question.getCloseReasonAcronym() %}
         {% set close_vote_count = question.getCloseVoteCount() %}

@@ -1,1 +1,18 @@
-A debugging template will go here. This is not to debug anything other than the actions performed by controller methods.
+```
+//--- source details ----------------------------------------------------------
+
+Route Source Name: {{ dump(route_src_name) }}Data Source Name: {{ dump(data_src_name) }}Timestamp: {{ dump(timestamp) }}
+
+//--- question data var_dump() ------------------------------------------------
+
+{{ dump(dump_questions) }}
+
+//--- question data print_r() -------------------------------------------------
+
+{{ print_questions }}
+
+//--- question data serialize() -------------------------------------------------
+
+{{ serialize_questions }}
+
+```
