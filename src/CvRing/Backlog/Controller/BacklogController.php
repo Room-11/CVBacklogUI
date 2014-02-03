@@ -48,13 +48,10 @@ class BacklogController
     {
         $this->assertAllowedSrcValues($src);
 
-        // ... run backlog code to get current cached data for source
-
         return $this->twig->render(
             'base_body.html.twig',
             [
-                'source_data' => false, /* nothing to return yet */
-                'src' => $src
+                'source_data' => $this->backlog->getSourceData($src)
             ]
         );
     }
@@ -67,30 +64,34 @@ class BacklogController
     {
         $this->assertAllowedSrcValues($src);
 
-        $cacheFile = "{$this->config->getCachePath()}/{$src}_data.json";
-        $response = (new Response)->setHeader('Content-Type', 'application/json; charset=utf-8');
-
-        if (file_exists($cacheFile)) {
-            $this->logger->addCritical("cache file for '$src' did not exist");
-            return $response->setBody(
-                function () use ($cacheFile) {
-                    readfile($cacheFile);
-                }
+        if (file_exists("{$this->config->getCachePath()}/{$src}_data.json")) {
+            return $this->twig->render(
+                'tbody.html.twig',
+                [
+                    'source_data' => $this->backlog->getSourceData($src)
+                ]
             );
         }
 
-        $error = [
-            'code' => 404,
-            'data' => [
-                'file' => "{$src}_data.json"
-            ],
-            'message' => "cache file does not exist, retry in {$this->config->getSourceCacheTtl($src, 'data')} secs",
-            'status' => 'error'
-        ];
+        $this->logger->addCritical("cache file for '$src' did not exist");
 
-        return $response
-            ->setBody(json_encode($error, JSON_PRETTY_PRINT))
-            ->setStatus(404);
+        return (new Response)
+            ->setStatus(404)
+            ->setHeader('Content-Type', 'application/json; charset=utf-8')
+            ->setBody(
+                json_encode(
+                    [
+                        'code' => 404,
+                        'data' => [
+                            'file_name' => "{$src}_data.json",
+                            'retry_period' => $this->config->getSourceCacheTtl($src, 'data')
+                        ],
+                        'message' => "cache file does not exist",
+                        'status' => 'error'
+                    ],
+                    JSON_PRETTY_PRINT
+                )
+            );
     }
 
     /**
@@ -100,40 +101,49 @@ class BacklogController
     public function cacheRefreshAction($src)
     {
         if ('cli' !== PHP_SAPI) {
-            $this->logger->addCritical('Non-CLI cache update attempted.');
+
+            $this->logger->addCritical('Non-CLI cache update attempted');
+
             return (new Response)
-                ->setBody('Cache update only permitted via CLI')
+                ->setStatus(403)
                 ->setHeader('Content-Type', 'text/plain; charset=utf-8')
-                ->setStatus(403);
+                ->setBody('Cache update only permitted via CLI');
         }
 
         $this->assertAllowedSrcValues($src);
 
-        // ... update data cache where update code should return a status code
-
-        //return $status;
+        return $this->backlog->updateCache($src);
     }
 
     /**
      * @param $src
-     * @return string
+     * @param null $qid
+     * @return Response
      */
-    public function debugAction($src)
+    public function debugAction($src, $qid = null)
     {
         $this->assertAllowedSrcValues($src);
 
-        // ... get vars that would help to debug
-
-        $template = $this->twig->render(
-            'debug.text.twig',
-            [
-                // ... pass debug vars to debug template
-            ]
-        );
+        $sourceData = $this->backlog->getSourceData($src);
+        $questions = ($qid && isset($sourceData->questions[$qid]))
+            ? $sourceData->questions[$qid]
+            : $sourceData->questions;
 
         return (new Response)
-            ->setBody($template)
-            ->setHeader('Content-Type', 'text/plain; charset=utf-8');
+            ->setHeader('Content-Type', 'text/plain; charset=utf-8')
+            ->setBody(
+                $this->twig->render(
+                    'debug.text.twig',
+                    [
+                        'data_src_name' => $sourceData->src_name,
+                        'dump_questions' => $questions,
+                        'print_questions' => print_r($questions, true),
+                        'route_src_name' => $src,
+                        'serialize_questions' => serialize($questions),
+                        'timestamp' => $sourceData->timestamp
+                    ]
+                )
+            );
     }
 
     /**
