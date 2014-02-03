@@ -30,7 +30,6 @@ $twig = new Twig_Environment(
     ]
 );
 
-$twig->addExtension(new Twig_Extension_Debug());
 $twig->addExtension(new Twig_Extension_Optimizer());
 
 $twig->addGlobal('APP_ENV', $appEnv);
@@ -47,7 +46,7 @@ $twig->addFunction(
 
 $twig->addFunction(
     new Twig_SimpleFunction(
-        'dump_var',
+        'dump',
         function ($value) {
             ob_start();
             var_dump($value);
