@@ -5,6 +5,7 @@ $app->route('GET', '/backlog/$src', 'CvRing\Backlog\Controller\BacklogController
 $app->route('GET', '/backlog', 'CvRing\Backlog\Controller\BacklogController::indexAction');
 
 /* outputs raw debug dump for a source */
+$app->route('GET', '/backlog/$src/debug/$qid', 'CvRing\Backlog\Controller\BacklogController::debugAction');
 $app->route('GET', '/backlog/$src/debug', 'CvRing\Backlog\Controller\BacklogController::debugAction');
 
 /* refreshes data table content for a source */
