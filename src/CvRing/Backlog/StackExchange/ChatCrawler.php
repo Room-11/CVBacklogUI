@@ -15,6 +15,9 @@ use Monolog\Logger;
  */
 class ChatCrawler
 {
+    /** @var \CvRing\Backlog\StackExchange\StackApi */
+    private $api;
+
     /** @var \Artax\Client */
     private $client;
 
@@ -34,9 +37,11 @@ class ChatCrawler
      * @param Client $client
      * @param ConfigFile $config
      * @param Logger $logger
+     * @param StackApi $api
      */
-    public function __construct(Client $client, ConfigFile $config, Logger $logger)
+    public function __construct(Client $client, ConfigFile $config, Logger $logger, StackApi $api)
     {
+        $this->api = $api;
         $this->client = $client;
         $this->config = $config;
         $this->logger = $logger;
@@ -63,7 +68,7 @@ class ChatCrawler
             }
 
             $startTime = microtime(true);
-            $qids = $this->questionsExist($this->findQuestionsIds($html));
+            $qids = $this->api->questionsExist($this->findQuestionsIds($html));
             $this->qids = array_unique(array_merge($this->qids, $qids));
             $sleep = 10 - (microtime(true) - $startTime);
 
@@ -158,44 +163,5 @@ class ChatCrawler
         }
 
         return $result;
-    }
-
-    /**
-     * @param array $qids
-     * @return array
-     */
-    private function questionsExist(array $qids)
-    {
-        $query = http_build_query(
-            [
-                'filter' => $this->config->getFilter('check_qids'),
-                'key' => $this->config->getApiRequestKey(),
-                'pagesize' => 100,
-                'site' => $this->config->getApiStackDomain()
-            ]
-        );
-
-        try {
-
-            $request = 'https://api.stackexchange.com/2.1/questions/' . implode(';', $qids) . '?' . $query;
-            $this->logger->addInfo("requesting: $request");
-            $response = $this->client->request($request);
-
-            if ((200 === $response->getStatus()) && ('' !== $response->getBody())) {
-
-                $this->logger->addInfo('qid batch validation successful');
-                $entries = json_decode($response->getBody())->items;
-
-                foreach ($entries as $entry) {
-                    $qids[] = $entry->question_id;
-                }
-
-                return $qids;
-            }
-        } catch (ClientException $e) {
-            $this->logger->addCritical('request failed: ' . $e);
-        }
-
-        return false;
     }
 }

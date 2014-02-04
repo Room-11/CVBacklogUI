@@ -58,9 +58,9 @@ $twig->addFunction(
 $httpClient = new Client;
 $httpClient->setOption('connectTimeout', 30);
 
-$chatCrawler = new ChatCrawler($httpClient, $config, $logger);
-
 $stackApi = new StackApi($httpClient, $config, $logger);
+
+$chatCrawler = new ChatCrawler($httpClient, $config, $logger, $stackApi);
 
 $cache = new FileCache($config);
 

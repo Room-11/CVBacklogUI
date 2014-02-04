@@ -76,6 +76,45 @@ class StackApi
         return $this->qid_data;
     }
 
+    /**
+     * @param array $qids
+     * @return array
+     */
+    public function questionsExist(array $qids)
+    {
+        $query = http_build_query(
+            [
+                'filter' => $this->config->getFilter('check_qids'),
+                'key' => $this->config->getApiRequestKey(),
+                'pagesize' => 100,
+                'site' => $this->config->getApiStackDomain()
+            ]
+        );
+
+        try {
+
+            $request = 'https://api.stackexchange.com/2.1/questions/' . implode(';', $qids) . '?' . $query;
+            $this->logger->addInfo("requesting: $request");
+            $response = $this->client->request($request);
+
+            if ((200 === $response->getStatus()) && ('' !== $response->getBody())) {
+
+                $this->logger->addInfo('qid batch validation successful');
+                $entries = json_decode($response->getBody())->items;
+
+                foreach ($entries as $entry) {
+                    $qids[] = $entry->question_id;
+                }
+
+                return $qids;
+            }
+        } catch (ClientException $e) {
+            $this->logger->addCritical('request failed: ' . $e);
+        }
+
+        return false;
+    }
+
     private function fetchApiQuestionIds()
     {
         $query = http_build_query(
