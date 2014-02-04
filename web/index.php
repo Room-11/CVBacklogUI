@@ -14,8 +14,10 @@ ini_set('user_agent', 'CVBacklogUI/2.0.0 (https://github.com/Room-11/CVBacklogUI
 
 /* let's use OPcache if available */
 if (extension_loaded('Zend OPcache')) {
-    ini_set('opcache.enable', 1);
-    ini_set('opcache.enable_cli', 1);
+    $directive = (in_array(PHP_SAPI, ['cli', 'cli-server']))
+        ? 'opcache.enable_cli'
+        : 'opcache.enable';
+    ini_set($directive, 1);
 }
 
 /* get application environment */
