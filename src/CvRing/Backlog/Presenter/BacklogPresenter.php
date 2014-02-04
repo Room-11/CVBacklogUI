@@ -1,6 +1,6 @@
 <?php
 
-namespace CvRing\Backlog\Controller;
+namespace CvRing\Backlog\Presenter;
 
 use Arya\Response;
 use CvRing\Backlog\BacklogCore;
@@ -9,10 +9,10 @@ use Monolog\Logger;
 use Twig_Environment;
 
 /**
- * Class BacklogController
- * @package CvRing\BacklogUi\Controller
+ * Class BacklogPresenter
+ * @package CvRing\BacklogUi\Presenter
  */
-class BacklogController
+class BacklogPresenter
 {
     /** @var \CvRing\Backlog\BacklogCore */
     private $backlog;
