@@ -12,9 +12,6 @@
 @reopen-vote-bg: #DFF0D8;
 @review-bg: #D9EDF7;
 
-/* link color */
-@link-color: #2a6496;
-
 /* font icons */
 @font-face
 {
@@ -103,9 +100,9 @@ legend
 
 a
 {
-    color: darken(@link-color, 10%);
+    color: #3071a9;
 
-    &:hover {color: darken(@link-color, 15%);}
+    &:hover {color: #2a6496;}
 }
 
 h1
@@ -246,13 +243,12 @@ h1
                 {
                     th
                     {
-                        &:hover
+                        &.asc, &.desc, &:hover
                         {
                             background-color: #E9E9E9;
                             cursor: pointer;
                         }
 
-                        &.asc, &.desc {background-color: #E9E9E9;}
                         &:nth-child(1) {width: 65px;}
                         &:nth-child(3), &:nth-child(4), &:nth-child(5) {width: 58px;}
                     }
