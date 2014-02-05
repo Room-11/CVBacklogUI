@@ -150,7 +150,7 @@ class QuestionItem
             case 'too broad':
                 return 'tb';
             case 'not a real question':
-            case 'unclear what you&#39;re asking':
+            case "unclear what you're asking":
                 return 'uwya';
         }
 
@@ -165,7 +165,7 @@ class QuestionItem
             'ot'   => 'Off-Topic',
             'pob'  => 'Primarily Opinion Based',
             'tb'   => 'Too Broad',
-            'uwya' => 'Unclear What You&#39;re Asking'
+            'uwya' => "Unclear What You're Asking"
         ];
 
         return $reasons[$this->getCloseReasonAcronym()];
@@ -321,11 +321,11 @@ class QuestionItem
     /** @return bool */
     private function isReviewQuestion()
     {
-        return (!isset($this->closed_date)
-            && isset($this->migrated_from)
+        return ((!isset($this->closed_date)
             && 0 === $this->close_vote_count
             && 0 === $this->delete_vote_count
             && 0 === $this->reopen_vote_count
-            && 1 < $this->down_vote_count);
+            && 1 < $this->down_vote_count)
+            || isset($this->migrated_from));
     }
 }
