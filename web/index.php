@@ -10,6 +10,7 @@ ini_set('error_log', __DIR__ . '/../logs/php_errors.log');
 ini_set('error_reporting', E_ALL);
 ini_set('html_errors', 0);
 ini_set('log_errors', 1);
+ini_set('user_agent', 'CVBacklogUI/2.0.0 (https://github.com/Room-11/CVBacklogUI)');
 
 /* get application environment */
 $appEnv = (isset($_SERVER['APP_ENV']) && in_array($_SERVER['APP_ENV'], ['dev', 'prod']))
