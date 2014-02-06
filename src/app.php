@@ -57,6 +57,7 @@ $twig->addFunction(
 
 $httpClient = new Client;
 $httpClient->setOption('connectTimeout', 30);
+$httpClient->setOption('userAgentString', 'CVBacklogUI/2.0.0 (https://github.com/Room-11/CVBacklogUI)');
 
 $stackApi = new StackApi($httpClient, $config, $logger);
 

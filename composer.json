@@ -27,7 +27,7 @@
     "require": {
         "monolog/monolog": "~1.7",
         "php": ">=5.4",
-        "rdlowrey/artax": "~0.6.2",
+        "rdlowrey/artax": "dev-master",
         "rdlowrey/arya": "dev-master",
         "twig/twig": "~1.0"
     },
