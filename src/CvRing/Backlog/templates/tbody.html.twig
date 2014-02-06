@@ -6,7 +6,7 @@
         {% set delete_vote_count = question.getDeleteVoteCount() %}
         {% set reopen_vote_count = question.getReopenVoteCount() %}
         <tr class='{{ question.getQuestionType() }}'>
-            <td{% if close_reason_acronym is same as(false) %}>-{% else %} title='{{ question.getCloseReasonName() }}'>
+            <td{% if close_reason_acronym is same as(false) %}>-{% else %} title="{{ question.getCloseReasonName() }}">
                 {{ close_reason_acronym }}{% endif %}
             </td>
             <td title='Score: {{ question.getScore() }} ( +{{ question.getUpVoteCount() }} / -{{ question.getDownVoteCount() }} )'>
