@@ -64,7 +64,7 @@ $chatCrawler = new ChatCrawler($httpClient, $config, $logger, $stackApi);
 
 $cache = new FileCache($config);
 
-$backlog = new BacklogCore($cache);
+$backlog = new BacklogCore($config, $chatCrawler, $cache, $logger, $stackApi);
 
 /* inject dependencies */
 $app = new Application(
