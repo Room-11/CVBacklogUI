@@ -10,6 +10,11 @@ use CvRing\Backlog\StackExchange\ChatCrawler;
 use CvRing\Backlog\StackExchange\StackApi;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
+use Monolog\Processor\IntrospectionProcessor;
+use Monolog\Processor\MemoryPeakUsageProcessor;
+use Monolog\Processor\MemoryUsageProcessor;
+use Monolog\Processor\UidProcessor;
+use Monolog\Processor\WebProcessor;
 
 $config = new ConfigFile(__DIR__ . '/../config/backlog.ini');
 
@@ -19,6 +24,12 @@ $logger = new Logger('backlog_' . $appEnv);
 $logger->pushHandler(
     new RotatingFileHandler(__DIR__ . '/../logs/backlog_' . $appEnv . '.log', 7, $logLevel)
 );
+
+$logger->pushProcessor(new IntrospectionProcessor);
+$logger->pushProcessor(new MemoryPeakUsageProcessor);
+$logger->pushProcessor(new MemoryUsageProcessor);
+$logger->pushProcessor(new UidProcessor);
+$logger->pushProcessor(new WebProcessor);
 
 $twig = new Twig_Environment(
     new Twig_Loader_Filesystem(__DIR__ . '/../src/CvRing/Backlog/templates'),
