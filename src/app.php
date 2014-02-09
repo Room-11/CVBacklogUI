@@ -8,6 +8,7 @@ use CvRing\Backlog\ConfigFile;
 use CvRing\Backlog\FileCache;
 use CvRing\Backlog\StackExchange\ChatCrawler;
 use CvRing\Backlog\StackExchange\StackApi;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Monolog\Processor\IntrospectionProcessor;
@@ -18,18 +19,23 @@ use Monolog\Processor\WebProcessor;
 
 $config = new ConfigFile(__DIR__ . '/../config/backlog.ini');
 
-$logger = new Logger('backlog_' . $appEnv);
-
 /* keep a log for each day and rotate weekly */
-$logger->pushHandler(
-    new RotatingFileHandler(__DIR__ . '/../logs/backlog_' . $appEnv . '.log', 7, $logLevel)
+$stream = new RotatingFileHandler(__DIR__ . "/../logs/backlog_$appEnv.log", 7, $logLevel);
+$stream->setFormatter(
+    new LineFormatter("[%datetime%] %level_name%: %message% %context% %extra%\n", 'H:i:s')
 );
 
-$logger->pushProcessor(new IntrospectionProcessor);
-$logger->pushProcessor(new MemoryPeakUsageProcessor);
-$logger->pushProcessor(new MemoryUsageProcessor);
-$logger->pushProcessor(new UidProcessor);
-$logger->pushProcessor(new WebProcessor);
+$logger = new Logger(
+    'backlog',
+    [$stream],
+    [
+        new IntrospectionProcessor,
+        new MemoryPeakUsageProcessor,
+        new MemoryUsageProcessor,
+        new UidProcessor,
+        new WebProcessor
+    ]
+);
 
 $twig = new Twig_Environment(
     new Twig_Loader_Filesystem(__DIR__ . '/../src/CvRing/Backlog/templates'),
