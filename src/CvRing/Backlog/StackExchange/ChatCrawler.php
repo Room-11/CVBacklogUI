@@ -87,7 +87,9 @@ class ChatCrawler
             [
                 'page' => $this->page_number,
                 'pagesize' => 100,
-                'q' => 'tag:cv-pls tag:delv-pls tag:reopen-pls tag:review-pls tag:ro-pls tag:rov-pls tag:rv-pls',
+                'q' => 'tag:cv-pls tag:delv-pls tag:flag-pls '
+                    . 'tag:reopen-pls tag:ro-pls tag:rov-pls '
+                    . 'tag:review-pls tag:rv-pls',
                 'room' => $this->config->getChatSourceRoomId(),
                 'sort' => 'newest'
             ]
