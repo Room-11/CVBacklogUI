@@ -30,11 +30,26 @@ class ConfigFile
         return $this->config['api.request_key'];
     }
 
-    /** @return string */
+    /**
+     * @return string
+     * @throws \UnexpectedValueException
+     */
     public function getApiSourceTopicTags()
     {
         $this->verifyOption('sources.api_tags');
-        return $this->config['sources.api_tags'];
+        $topicTags = $this->config['sources.api_tags'];
+
+        if (!preg_match('/^[a-z\d+#.-]+(?:;[a-z\d+#.-]+)*$/', $topicTags)) {
+            throw new \UnexpectedValueException("'sources.api_tags' contains invalid chars, '$topicTags' provided");
+        }
+
+        $count = substr_count($topicTags, ';') + 1;
+
+        if (5 < $count) {
+            throw new \UnexpectedValueException("'sources.api_tags' more than max of 5 tags, '$count' tags provided");
+        }
+
+        return $topicTags;
     }
 
     /**
