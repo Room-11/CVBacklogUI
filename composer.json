@@ -6,6 +6,7 @@
     "name": "room-11/cvbacklogui",
     "type": "project",
     "version": "v2.0.0-alpha",
+    "minimum-stability": "dev",
     "authors": [
         {
             "email": "kyra@existing.me",
