@@ -6,7 +6,6 @@
     "name": "room-11/cvbacklogui",
     "type": "project",
     "version": "v2.0.0-alpha",
-    "minimum-stability": "dev",
     "authors": [
         {
             "email": "kyra@existing.me",
@@ -26,17 +25,18 @@
         }
     ],
     "require": {
-        "monolog/monolog": "~1.7",
+        "monolog/monolog": "~1.10",
+        "nikic/fast-route": "dev-master",
         "php": ">=5.4",
-        "rdlowrey/artax": "dev-master",
+        "rdlowrey/artax": "~0.7",
         "rdlowrey/arya": "dev-master",
-        "twig/twig": "~1.0"
+        "twig/twig": "1.16"
     },
     "require-dev": {
-        "phpunit/phpunit": "~3.7",
+        "phpunit/phpunit": "~4.2",
         "satooshi/php-coveralls": "~0.6",
-        "squizlabs/php_codesniffer": "~1.5",
-        "twbs/bootstrap": "v3.1.0"
+        "squizlabs/php_codesniffer": "2.0.0RC1",
+        "twbs/bootstrap": "v3.2.0"
     },
     "autoload": {
         "psr-4": {
