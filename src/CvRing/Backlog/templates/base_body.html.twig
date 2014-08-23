@@ -13,7 +13,7 @@
     <small>
         {% if 'api' == source_data.src_name %}
             API <small>/</small>
-            <a href='/backlog/chat' title='Pull from the PHP chatroom transcript'>Chatroom</a>
+            <a href='/backlog/chat' title='Pull from the {{ config.getSourceTitle('chat') }} transcript'>Chatroom</a>
         {% else %}
             <a href='/backlog/api' title='Pull from the Stack Exchange API'>API</a>
             <small>/</small> Chatroom
