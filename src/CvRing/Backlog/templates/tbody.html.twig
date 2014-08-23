@@ -9,7 +9,7 @@
             <td{% if close_reason_acronym is same as(false) %}>-{% else %} title="{{ question.getCloseReasonName() }}">
                 {{ close_reason_acronym }}{% endif %}
             </td>
-            <td title='Score: {{ question.getScore() }}  |  Votes: {{ question.getUpVoteCount() }} , {{ question.getDownVoteCount() }}'>
+            <td title='Score: {{ question.getScore() }}  |  Votes: +{{ question.getUpVoteCount() }} , -{{ question.getDownVoteCount() }}'>
                 <a href='{{ question.getLink() }}'><span>{{ question.getUnsafeTitle()|escape('html') }}</span>
                     {% if question.isAccepted() %}<i class='icon-accepted' title='Has accepted answer'></i>{% endif %}
                     {% if question.isBountied() %}<i class='icon-bounty' title='Has bounty in place'></i>{% endif %}
