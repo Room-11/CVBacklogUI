@@ -1,6 +1,3 @@
-{% set dev_dir = APP_ENV is same as ('dev') ? '/dev' : '' %}
-<script src='{{ asset('assets/js' ~ dev_dir ~ '/form_options.js') }}'></script>
-<script src='{{ asset('assets/js' ~ dev_dir ~ '/table_sorter.js') }}'></script>
-<script src='{{ asset('assets/js' ~ dev_dir ~ '/main.js') }}'></script>
+<script src='{{ asset('assets/js/compiled.js') }}'></script>
 </body>
 </html>

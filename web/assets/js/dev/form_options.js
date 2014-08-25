@@ -184,7 +184,11 @@
          * @param {Function} [callback] Called when the refresh operation completes
          */
         DataTable.prototype.refresh = function (callback) {
-            // TODO: implement this
+
+            /**
+             * todo: have client grab updated question data and then upload to server to process?
+             * This will reduce load on server and greatly help with throttling limits.
+             * */
 
             this.init();
             callback();
