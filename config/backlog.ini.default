@@ -7,16 +7,15 @@
 [api]
 
 ; Increase request quota as a registered app, should not be shared
-; Default development key provided which may be revoked at anytime
-; You should be registering your own key for production use
 ; https://stackapps.com/questions/67/how-api-keys-work
 ; https://api.stackexchange.com/docs/throttle
-api.request_key = 'pMxerkFG8E257Xblt5BUHA(('
+api.request_key = ''
 
 ; Restrict API requests to this Stack Exchange site
 ; Requires FULL domain rather than short name
 ; http://api.stackexchange.com/docs#docs
-api.stack_domain = 'stackoverflow.com'
+; e.g. stackoverflow.com
+api.stack_domain = ''
 
 ; Should only be modified for development purposes
 ; https://api.stackexchange.com/docs/create-filter
@@ -47,14 +46,15 @@ sources.chat_max_items = 250
 
 ; Source titles
 sources.api_title  = 'Stack Exchange API'
-sources.chat_title = 'Stack Overflow PHP Chatroom'
+sources.chat_title = ''
 
 ; Semicolon separated list of topic tags to limit API source to
 ; Max of 5 tags allowed, otherwise API returns 0 results
-sources.api_tags = 'php'
+sources.api_tags = ''
 
 ; Chat source domain name
-sources.chat_domain = 'chat.stackoverflow.com'
+; e.g. chat.stackoverflow.com
+sources.chat_domain = ''
 
 ; Chat source room ID
-sources.chat_room_id = 11
+sources.chat_room_id = 0
