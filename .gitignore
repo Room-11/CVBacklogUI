@@ -2,5 +2,6 @@
 cache/*
 composer.lock
 composer.phar
+config/backlog.ini
 logs/*
 vendor
