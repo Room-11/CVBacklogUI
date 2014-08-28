@@ -20,7 +20,7 @@ api.stack_domain = ''
 ; Should only be modified for development purposes
 ; https://api.stackexchange.com/docs/create-filter
 api.filters.check_qids = '!C(o(h.gNuDncux4Ea'
-api.filters.get_data   = '!-xzz8p32MUAo.fEEsQFj-QwDinCbusf-0vE7njby9'
+api.filters.get_data   = '!oDgFgLSU.K(-4K9KNOXmp7-ebvO5WCZcwr63IO2gjz5'
 api.filters.get_qids   = '!Pw)h*DDu5-A0HbNq52DxIKLnh(vWkZ'
 
 
