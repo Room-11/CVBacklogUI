@@ -59,7 +59,7 @@ $cspPolicy = "default-src 'self'; "
     . "img-src 'self'; "
     . "media-src 'none'; "
     . "frame-src 'none'; "
-    . "font-src 'self' https://themes.googleusercontent.com; "
+    . "font-src 'self' https://themes.googleusercontent.com https://fonts.gstatic.com; "
     . "connect-src 'self'";
 
 header('Content-Security-Policy: ' . $cspPolicy);
